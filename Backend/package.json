@@ -1,0 +1,19 @@
+{
+  "name": "hbad-backend",
+  "version": "1.0.0",
+  "description": "backend for hbad website",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "Javascript",
+    "backend"
+  ],
+  "author": "Akshat Modi",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
