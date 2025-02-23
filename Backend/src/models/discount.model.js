@@ -53,7 +53,8 @@ const discountSchema = new Schema(
         },
         isActive:{
             type: Boolean,
-            default: true
+            default: true,
+            required: true
         }
     },
     {
