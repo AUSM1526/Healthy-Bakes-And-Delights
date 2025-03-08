@@ -1,6 +1,6 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
-import User from "../models/User.js";
+import {User} from "../models/user.model.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
@@ -28,7 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // Get avatarPath
     const avatarLocalPath = req.file?.path;
-    console.log(req.file?.path);
+    console.log("Req.file: ",req.file?.path);
 
     // uploading avatar to cloudinary
     const avatar = await uploadOnCloudinary(avatarLocalPath);
