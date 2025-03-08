@@ -35,10 +35,6 @@ const registerUser = asyncHandler(async (req, res) => {
     console.log(avatar);
     console.log(avatar.url);
 
-    if(!avatar){
-        throw new ApiError(400, "Avatar file is required");
-    }
-
     // create user object
     const user = await User.create({
         username,
@@ -48,7 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
         phoneNumber,
         password,
         accountType,
-        avatar: avatar.url
+        avatar: avatar==null ? null : avatar.url
     });
 
     if(!user){
