@@ -4,6 +4,7 @@ import {User} from "../models/user.model.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import {deleteFromCloudinary} from "../utils/cloudinary.js";
 
 //Function to genearate access and refresh token
 const generateAccessAndRefreshToken = async (userId) => {
@@ -211,9 +212,101 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 });
 
+// Change Password Function
+const changePassword = asyncHandler(async (req, res) => {
+    const {oldPassword, newPassword} = req.body;
+
+    if(!oldPassword || !newPassword){
+        throw new ApiError(400, "Old Password and New Password are required");
+    }
+
+    const user = await User.findById(req.user?._id);
+    const isPassword = await user.isPasswordCorrect(oldPassword);
+
+    if(!isPassword){
+        throw new ApiError(400, "Please enter correct old password");
+    }
+
+    user.password = newPassword;
+    await user.save({validateBeforeSave: false});
+
+    return res.status(200).json(
+        new ApiResponse(200, {}, "Password changed successfully")
+    )
+});
+
+// Update Name Function
+const updateName = asyncHandler(async (req, res) => {
+    const {firstName, lastName} = req.body;
+
+    if(!firstName || !lastName){
+        throw new ApiError(400, "First Name and Last Name are required");
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                firstName,
+                lastName
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password");
+
+    return res.status(200).json(
+        new ApiResponse(200, {user}, "Name updated successfully")
+    )
+});
+
+//Update Avatar Function
+const updateAvatar = asyncHandler(async (req, res) => {
+    const avatarLocalPath = req.file?.path;
+
+    if(!avatarLocalPath){
+        throw new ApiError(400, "Avatar File is required");
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+    if(!avatar.url){
+        throw new ApiError(500, "Error while uploading Avatar file");
+    }
+
+    const user = await User.findById(req.user?._id).select(
+        "-password -refreshToken"
+    );
+    const match = user.avatar ? user.avatar.match(/\/([^\/]+)\.\w+$/) : null;
+
+    const oldAvatarPublicId = match ? match[1] : null;
+
+    user.avatar = avatar.url;
+    await user.save({validateBeforeSave: false});
+
+    // delete old avatar from cloudinary
+    if(oldAvatarPublicId){
+        try {
+            console.log("oldAvatarPublicId: ",oldAvatarPublicId);
+            await deleteFromCloudinary(oldAvatarPublicId);
+        } catch (error) {
+            console.error("Failed to delete old avatar from Cloudinary:", error);
+        }
+    }
+    
+    return res.status(200).json(
+        new ApiResponse(200, {user}, "Avatar updated successfully")
+    )
+
+});
+
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    changePassword,
+    updateName,
+    updateAvatar
 };
