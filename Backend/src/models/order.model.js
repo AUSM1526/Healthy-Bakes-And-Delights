@@ -43,30 +43,9 @@ const orderSchema = new Schema(
             }
         },
         address:{
-            houseNumber: {
-                type: String,
-                required: true
-            },
-            name:{
-                type: String,
-                required: true
-            },
-            area:{
-                type: String,
-                required: true
-            },
-            city:{
-                type: String,
-                required: true
-            },
-            state:{
-                type: String,
-                required: true
-            },
-            pincode:{
-                type:Number,
-                required: true
-            }
+            type: Schema.Types.ObjectId,
+            ref: "Address",
+            required: true
         },
         discount:[{
             type: Schema.Types.ObjectId,

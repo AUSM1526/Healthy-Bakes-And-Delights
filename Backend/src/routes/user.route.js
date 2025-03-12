@@ -9,7 +9,6 @@ userRouter.route("/register").post(upload.single("avatar"),registerUser);
 userRouter.route("/login").post(loginUser);
 userRouter.route("/refresh-token").post(refreshAccessToken);
 
-// secured routes
 userRouter.route("/logout").post(verifyJWT,logoutUser);
 userRouter.route("/change-password").patch(verifyJWT,changePassword);
 userRouter.route("/update-name").patch(verifyJWT,updateName);
