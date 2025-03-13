@@ -18,9 +18,11 @@ app.use(express.static("public"));
 //routes import
 import userRouter from "./routes/user.route.js"
 import addressRouter from "./routes/address.route.js";
+import productTypeRouter from "./routes/productType.route.js";
 
 //routes declaration
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/address", addressRouter);
+app.use("/api/v1/productType", productTypeRouter);
 
 export default app;
