@@ -7,7 +7,7 @@ const productTypeRouter = Router();
 
 productTypeRouter.route("/add-product-type").post(verifyJWT,isAdmin,addProductType);
 productTypeRouter.route("/get-all-productTypes").get(verifyJWT,isAdmin,getAllProductTypes);
-productTypeRouter.route("/:productTypeid").patch(verifyJWT,isAdmin,updateProductType);
-productTypeRouter.route("/:productTypeid").delete(verifyJWT,isAdmin,deleteProductType);
+productTypeRouter.route("/:productTypeId").patch(verifyJWT,isAdmin,updateProductType);
+productTypeRouter.route("/:productTypeId").delete(verifyJWT,isAdmin,deleteProductType);
 
 export default productTypeRouter;
