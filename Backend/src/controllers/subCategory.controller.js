@@ -90,8 +90,18 @@ const deleteSubCategory = asyncHandler(async (req, res, next) => {
 
 });
 
+// Get All subCategories
+const getAllSubCategories = asyncHandler(async (req, res, next) => {
+    const subCategories = await SubCategory.find({}).populate("productType");
+
+    return res.status(200).json(
+        new ApiResponse(200, {subCategories}, "Sub Categories fetched successfully")
+    );
+});
+
 export {
     createSubCategory,
     updateSubCategory,
-    deleteSubCategory
+    deleteSubCategory,
+    getAllSubCategories
 };
