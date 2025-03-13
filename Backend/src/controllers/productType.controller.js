@@ -7,7 +7,7 @@ import { ProductType } from "../models/productType.model.js";
 const addProductType = asyncHandler(async (req, res, next) => {
     const { name, hasSubCategories } = req.body;
 
-    if(!name && hasSubCategories === undefined){
+    if(!name || hasSubCategories === undefined){
         throw new ApiError(400, "All fields are required");
     }
 
