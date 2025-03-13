@@ -301,6 +301,26 @@ const updateAvatar = asyncHandler(async (req, res) => {
 
 });
 
+// Get User Details
+const getUserDetails = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user?._id).select("-password -refreshToken");
+
+    if(!user){
+        throw new ApiError(404, "User not found, while fetching details");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {user}, "User details fetched successfully")
+    );
+});
+
+// Get Order History
+
+// Add to Cart
+
+// Delete from Cart
+
+// Get Cart
 
 export {
     registerUser,
@@ -309,5 +329,6 @@ export {
     refreshAccessToken,
     changePassword,
     updateName,
-    updateAvatar
+    updateAvatar,
+    getUserDetails
 };
