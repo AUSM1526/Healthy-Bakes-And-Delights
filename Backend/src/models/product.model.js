@@ -2,11 +2,6 @@ import mongoose , {Schema} from "mongoose";
 
 const productSchema = new Schema(
     {
-        productId:{
-            type:String,
-            required:true,
-            unique: true
-        },
         name:{
             type:String,
             required:true,
@@ -30,7 +25,7 @@ const productSchema = new Schema(
         description:{
             type:String
         },
-        image:[
+        images:[
             String
         ],
         additionalPrice:{
