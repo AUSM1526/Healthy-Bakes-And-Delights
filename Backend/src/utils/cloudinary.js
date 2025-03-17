@@ -43,4 +43,24 @@ const deleteFromCloudinary = async (publicId) => {
     }
 };
 
-export {uploadOnCloudinary, deleteFromCloudinary};
+// uploadMultiple on Cloudinary
+const uploadMultipleOnCloudinary = async(localFilePaths) => {
+    try {
+        if(!localFilePaths || localFilePaths.length === 0) return [];
+
+        const uploadedPromises = localFilePaths.map((path) => uploadOnCloudinary(path));
+
+        const uploadedImages = await Promise.allSettled(uploadedPromises);
+
+        const successfulUploads = uploadedImages.
+        filter((result) => result.status === "fulfilled")
+        . map((result) => result.value);
+
+        return successfulUploads;
+    } catch (error) {
+        console.log("Error while uploading Multiple files on cloudinary ", error);
+        return [];
+    }
+}
+
+export {uploadOnCloudinary, deleteFromCloudinary, uploadMultipleOnCloudinary};
