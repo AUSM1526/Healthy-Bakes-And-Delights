@@ -75,6 +75,7 @@ const updateSubCategory = asyncHandler(async (req, res, next) => {
 });
 
 // Delete a subCategory
+// Need to check if linked with any product
 const deleteSubCategory = asyncHandler(async (req, res, next) => {
     const {subCategoryId} = req.params;
 
