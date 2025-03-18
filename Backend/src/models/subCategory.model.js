@@ -11,7 +11,6 @@ const subCategorySchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'ProductType',
             required: true,
-            unique: true
         },
         basePrice:{
             type:Number,

@@ -24,6 +24,8 @@ const createSubCategory = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, "Sub Category already exists");
     }
 
+    //await SubCategory.collection.dropIndex("productType_1");
+
     const subCategoryCreated = await SubCategory.create({
         name,
         productType: productTypeExists._id,
