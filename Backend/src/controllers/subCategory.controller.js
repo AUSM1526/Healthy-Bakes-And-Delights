@@ -3,6 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { ProductType } from "../models/productType.model.js";
 import { SubCategory } from "../models/subCategory.model.js";
+import mongoose from "mongoose";
 
 // Create a new subCategory
 const createSubCategory = asyncHandler(async (req, res, next) => {
@@ -47,8 +48,8 @@ const updateSubCategory = asyncHandler(async (req, res, next) => {
 
     const {subCategoryId} = req.params;
 
-    if(!subCategoryId){
-        throw new ApiError(400, "SubCategoryId is Invalid");
+    if (!mongoose.Types.ObjectId.isValid(subCategoryId)) {
+        throw new ApiError(400, "Invalid subCategory ID format");
     }
 
     const productTypeExists = await ProductType.findOne({name: productTypeName});
@@ -67,7 +68,8 @@ const updateSubCategory = asyncHandler(async (req, res, next) => {
             }
         },
         {
-            new : true
+            new : true,
+            runValidators: true
         }
     );
 
@@ -81,8 +83,8 @@ const updateSubCategory = asyncHandler(async (req, res, next) => {
 const deleteSubCategory = asyncHandler(async (req, res, next) => {
     const {subCategoryId} = req.params;
 
-    if(!subCategoryId){
-        throw new ApiError(400, "SubCategoryId is Invalid");
+    if (!mongoose.Types.ObjectId.isValid(subCategoryId)) {
+        throw new ApiError(400, "Invalid subCategory ID format");
     }
 
     await SubCategory.findByIdAndDelete(subCategoryId);

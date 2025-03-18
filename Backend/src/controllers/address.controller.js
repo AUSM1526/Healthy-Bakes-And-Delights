@@ -3,6 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import {User} from "../models/user.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import {Address} from "../models/address.model.js";
+import mongoose from "mongoose";
 
 // Add Address Function
 const addAddress = asyncHandler(async (req, res) => {
@@ -55,8 +56,8 @@ const addAddress = asyncHandler(async (req, res) => {
 const updateAddress = asyncHandler(async (req, res) => {
     const {addressId} = req.params;
 
-    if(!addressId){
-        throw new ApiError(400, "Address ID not found");
+    if (!mongoose.Types.ObjectId.isValid(addressId)) {
+        throw new ApiError(400, "Invalid address ID format");
     }
 
     const address = await Address.findById(addressId);
@@ -93,7 +94,8 @@ const updateAddress = asyncHandler(async (req, res) => {
             }
         },
         {
-            new: true
+            new: true,
+            runValidators: true
         }
     );
 
@@ -107,8 +109,8 @@ const deleteAddress = asyncHandler(async (req, res) => {
     const {addressId} = req.params;
     //console.log("Address ID: ", addressId);
 
-    if(!addressId){
-        throw new ApiError(400, "Address ID not found");
+    if (!mongoose.Types.ObjectId.isValid(addressId)) {
+        throw new ApiError(400, "Invalid address ID format");
     }
 
     const address = await Address.findById(addressId);

@@ -2,6 +2,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { ProductType } from "../models/productType.model.js";
+import mongoose from "mongoose";
 
 // Add ProductType
 const addProductType = asyncHandler(async (req, res, next) => {
@@ -50,8 +51,8 @@ const updateProductType = asyncHandler(async (req, res, next) => {
     const { name, hasSubCategories } = req.body;
     const { productTypeid } = req.params;
 
-    if(!productTypeid){
-        throw new ApiError(400, "Product Type id is required");
+    if (!mongoose.Types.ObjectId.isValid(productTypeid)) {
+            throw new ApiError(400, "Invalid productType ID format");
     }
 
     const updatedProductType = await ProductType.findByIdAndUpdate(
@@ -63,7 +64,8 @@ const updateProductType = asyncHandler(async (req, res, next) => {
             }
         },
         {
-            new: true
+            new: true,
+            runValidators: true
         }
     );
 
@@ -77,8 +79,8 @@ const updateProductType = asyncHandler(async (req, res, next) => {
 const deleteProductType = asyncHandler(async (req, res, next) => {
     const { productTypeid } = req.params;
 
-    if(!productTypeid){
-        throw new ApiError(400, "Product Type id is required");
+    if (!mongoose.Types.ObjectId.isValid(productTypeid)) {
+        throw new ApiError(400, "Invalid productType ID format");
     }
 
     const deleteProductType = await ProductType.findByIdAndDelete(productTypeid);
