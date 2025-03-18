@@ -31,9 +31,23 @@ const createProduct = asyncHandler(async (req, res, next) => {
         }
     }
 
+    const existedProduct = await Product.findOne(
+        {
+            $and:[
+                {name: name},
+                {productType: productTypeExists._id},
+                {subCategory: subCategoryExists ? subCategoryExists._id : null}
+            ]
+        }
+    );
+
+    if(existedProduct){
+        throw new ApiError(400,"Product already exists");
+    }
+
     const imagePaths = req.files?.map(file => file.path) || [];
     const uploadedImages = await uploadMultipleOnCloudinary(imagePaths);
-    console.log("Images: ",uploadedImages);
+    //console.log("Images: ",uploadedImages);
 
     const imageUrls = uploadedImages.map(img => img.secure_url);
 
@@ -50,6 +64,11 @@ const createProduct = asyncHandler(async (req, res, next) => {
     return res.status(201).json(
         new ApiResponse(201,{ createdProduct },"Product created successfully")
     );
+
+});
+
+// Get Products with price
+const getProductsWithPrice = asyncHandler(async (req, res, next) => {
 
 });
 
