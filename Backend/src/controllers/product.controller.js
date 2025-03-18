@@ -5,12 +5,13 @@ import {Product} from "../models/product.model.js";
 import {ProductType} from "../models/productType.model.js";
 import {SubCategory} from "../models/subCategory.model.js";
 import {uploadMultipleOnCloudinary} from "../utils/cloudinary.js";
+import mongoose from "mongoose";
 
 // Create Product
 // Reviews and Discount left
 const createProduct = asyncHandler(async (req, res, next) => {
     const{name, productTypeName, subCategoryName, description, additionalPrice, stock} = req.body;
-
+    //console.log("create product body: ",req.body);
     if(!name || !productTypeName || !description || !additionalPrice || !stock){
         throw new ApiError(400,"All the fields are required");
     }
@@ -160,9 +161,63 @@ const getProductsWithSubcategory = asyncHandler(async (req, res, next) => {
     );
 });
 
+// Update Product
+const updateProductDetails = asyncHandler(async (req, res, next) => {
+    const {productId} = req.params;
+    //console.log(req.body);
+    const{name, productTypeName, subCategoryName, description, additionalPrice, stock} = req.body;
+
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new ApiError(400, "Invalid product ID format");
+    }
+
+    const productExists = await Product.findById(productId);
+    if(!productExists){
+        throw new ApiError(404, "Product not found");
+    }
+    
+    //console.log(productTypeName);   
+    const productTypeExists = await ProductType.findOne({name: productTypeName});
+    //console.log("Product Type: ",productTypeExists);
+    if(!productTypeExists){
+        throw new ApiError(400,"Product Type does not existsss");
+    }
+
+    let subCategoryExists = null;
+    if(productTypeExists.name === 'Chocolate'){
+        subCategoryExists = await SubCategory.findOne({name: subCategoryName});
+        if(!subCategoryExists){
+            throw new ApiError(400,"Sub Category does not exist");
+        }
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+        productId,
+        {
+            $set:{
+                name,
+                productType: productTypeExists._id,
+                subCategory: productTypeExists.name === 'Chocolate' ? subCategoryExists._id : null,
+                description,
+                additionalPrice,
+                stock
+            }
+        },
+        {
+            new: true,
+            runValidators: true
+        }
+    );
+
+    return res.status(200).json(
+        new ApiResponse(200,{ updatedProduct },"Product updated successfully")
+    );
+});
 
 
 export {
     createProduct,
-    getProductsWithSubcategory
+    getProductsWithSubcategory,
+    updateProductDetails
 };
