@@ -6,6 +6,7 @@ import {ProductType} from "../models/productType.model.js";
 import {SubCategory} from "../models/subCategory.model.js";
 import {uploadMultipleOnCloudinary} from "../utils/cloudinary.js";
 import mongoose from "mongoose";
+import {deleteFromCloudinary} from "../utils/cloudinary.js";
 
 // Create Product
 // Reviews and Discount left
@@ -176,7 +177,7 @@ const updateProductDetails = asyncHandler(async (req, res, next) => {
     if(!productExists){
         throw new ApiError(404, "Product not found");
     }
-    
+
     //console.log(productTypeName);   
     const productTypeExists = await ProductType.findOne({name: productTypeName});
     //console.log("Product Type: ",productTypeExists);
@@ -215,9 +216,47 @@ const updateProductDetails = asyncHandler(async (req, res, next) => {
     );
 });
 
+// Delete Image from Product
+const deleteProductImage = asyncHandler(async (req, res, next) => {
+    const {productId, imageUrl} = req.query;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new ApiError(400, "Invalid product ID format");
+    }
+
+    const productExists = await Product.findById(productId);
+    if(!productExists){
+        throw new ApiError(404, "Product not found");
+    }
+
+    if (!productExists.images.includes(imageUrl)) {
+        throw new ApiError(404, "Image not found in product");
+    }
+
+    const match = imageUrl ? imageUrl.match(/\/([^\/]+)\.\w+$/) : null;
+    const imagePublicId = match ? match[1] : null;
+
+    if(imagePublicId){
+        try {
+                console.log("imagePublicId: ",imagePublicId);
+                await deleteFromCloudinary(imagePublicId);
+        } catch (error) {
+                console.error("Failed to delete old avatar from Cloudinary:", error);
+        }
+    }
+
+    productExists.images = productExists.images.filter(img => img !== imageUrl);
+    await productExists.save({validateBeforeSave: false});
+
+    return res.status(200).json(
+        new ApiResponse(200, {productExists}, "Image deleted successfully")
+    );
+});
+
 
 export {
     createProduct,
     getProductsWithSubcategory,
-    updateProductDetails
+    updateProductDetails,
+    deleteProductImage
 };
