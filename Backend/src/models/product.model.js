@@ -6,14 +6,11 @@ const productSchema = new Schema(
             type:String,
             required:true,
             trim:true,
-            unique: true,
-            index: true
         },
         productType:{
             type: Schema.Types.ObjectId,
             ref: 'ProductType',
             required: true,
-            unique: true
         },
         subCategory:{
             type: Schema.Types.ObjectId,
@@ -50,6 +47,9 @@ const productSchema = new Schema(
     {
         timestamps: true
     }
-)
+);
+
+// Compound Index
+productSchema.index({ name: 1, productType: 1, subCategory: 1 }, { unique: true });
 
 export const Product = mongoose.model("Product",productSchema);
