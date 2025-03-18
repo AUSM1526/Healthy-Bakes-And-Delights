@@ -51,6 +51,9 @@ const createProduct = asyncHandler(async (req, res, next) => {
 
     const imageUrls = uploadedImages.map(img => img.secure_url);
 
+    //await Product.collection.dropIndex("name_1");
+    //await Product.collection.dropIndex("productType_1");
+
     const createdProduct = await Product.create({
         name,
         productType: productTypeExists._id,
@@ -67,9 +70,99 @@ const createProduct = asyncHandler(async (req, res, next) => {
 
 });
 
-// Get Products with price
-const getProductsWithPrice = asyncHandler(async (req, res, next) => {
+// GetProducts with All Subcategory it belongs to and their corresponding price
+const getProductsWithSubcategory = asyncHandler(async (req, res, next) => {
+    const products = await Product.aggregate([
 
+        // Lookup product type
+        {
+            $lookup: {
+                from: 'producttypes',
+                localField: 'productType',
+                foreignField: '_id',
+                as: 'productType'
+            }
+        },
+        { $unwind: "$productType" },
+
+        // Lookup subcategory
+        {
+            $lookup: {
+                from: 'subcategories',
+                localField: 'subCategory',
+                foreignField: '_id',
+                as: 'subCategory'
+            }
+        },
+
+        // Unwind subcategory (make it an object, not an array)
+        {
+            $unwind: {
+                path: "$subCategory",
+                preserveNullAndEmptyArrays: true  // Keep products without subcategories
+            }
+        },
+
+        // Add total price with safe numeric conversion
+        // Convert basePrice and additionalPrice separately
+        {
+            $addFields: {
+                basePrice: {
+                    $cond: {
+                        if: { $ifNull: ["$subCategory.basePrice", false] },
+                        then: { $toDouble: "$subCategory.basePrice" },
+                        else: 0
+                    }
+                },
+                additionalPrice: { 
+                    $toDouble: { $ifNull: ["$additionalPrice", 0] } 
+                }
+            }
+        },
+
+        // Calculate totalPrice in a separate stage
+        {
+            $addFields: {
+                totalPrice: { 
+                    $add: ["$basePrice", "$additionalPrice"] 
+                }
+            }
+        },
+
+        // Group by product name and aggregate subcategories
+        {
+            $group: {
+                _id: "$name",
+                productType: { $first: "$productType.name" },
+                subCategories: {
+                    $push: {
+                        name: { $ifNull: ["$subCategory.name", null] },
+                        price: "$totalPrice",
+                        stock: "$stock"
+                    }
+                }
+            }
+        },
+
+        // Restructure the final output
+        {
+            $project: {
+                name: "$_id",
+                productType: 1,
+                subCategories: 1,
+                _id: 0
+            }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, { products }, "All Products Displayed successfully")
+    );
 });
 
-export {createProduct};
+
+
+export {
+    createProduct,
+    getProductsWithSubcategory
+};
