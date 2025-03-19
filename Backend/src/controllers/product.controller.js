@@ -170,7 +170,7 @@ const updateProductDetails = asyncHandler(async (req, res, next) => {
 
 
     if (!mongoose.Types.ObjectId.isValid(productId)) {
-        throw new ApiError(400, "Invalid product ID format");
+        throw new ApiError(400, "Invalid product ID format...");
     }
 
     const productExists = await Product.findById(productId);
@@ -253,10 +253,76 @@ const deleteProductImage = asyncHandler(async (req, res, next) => {
     );
 });
 
+// add Image for Product
+const addProductImages = asyncHandler(async (req, res, next) => {
+    const {productId} = req.query;
+    //console.log("ProductId: ",productId);
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new ApiError(400, "Invalid product ID format");
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+        throw new ApiError(404, "Product not found");
+    }
+
+    const imagePaths = req.files?.map(file => file.path) || [];
+    const uploadedImages = await uploadMultipleOnCloudinary(imagePaths);
+    const imageUrls = uploadedImages.map(img => img.secure_url);
+
+    product.images.push(...imageUrls);
+    await product.save({ validateBeforeSave: false });
+
+    return res.status(200).json(
+        new ApiResponse(200, { product }, "Images added successfully")
+    );
+});
+
+// Delete Product
+const deleteProduct = asyncHandler(async (req, res, next) => {
+    const { productId } = req.query;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new ApiError(400, "Invalid product ID format");
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) {
+        throw new ApiError(404, "Product not found");
+    }
+
+    const imageUrls = product.images;
+
+    if(imageUrls.length > 0){
+        const deletePromises = imageUrls.map(async(imageUrl) =>{
+            const match = imageUrl ? imageUrl.match(/\/([^\/]+)\.\w+$/) : null;
+            const imagePublicId = match ? match[1] : null;
+    
+            if(imagePublicId){
+                try {
+                        console.log("imagePublicId: ",imagePublicId);
+                        await deleteFromCloudinary(imagePublicId);
+                } catch (error) {
+                        console.error("Failed to delete old avatar from Cloudinary:", error);
+                }
+            }
+        })
+        await Promise.all(deletePromises);
+    }
+    
+    await Product.findByIdAndDelete(productId);
+
+    return res.status(200).json(
+        new ApiResponse(200, { }, "Product deleted successfully")
+    );
+});
+
 
 export {
     createProduct,
     getProductsWithSubcategory,
     updateProductDetails,
-    deleteProductImage
+    deleteProductImage,
+    addProductImages,
+    deleteProduct
 };
