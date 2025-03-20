@@ -5,6 +5,8 @@ import {uploadOnCloudinary} from "../utils/cloudinary.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import {deleteFromCloudinary} from "../utils/cloudinary.js";
+import mongoose from "mongoose";
+import {Product} from "../models/product.model.js";
 
 //Function to genearate access and refresh token
 const generateAccessAndRefreshToken = async (userId) => {
@@ -317,10 +319,170 @@ const getUserDetails = asyncHandler(async (req, res) => {
 // Get Order History
 
 // Add to Cart
+const addToCart = asyncHandler(async (req, res) => {
+    const {productId} = req.query;
+    if(!mongoose.isValidObjectId(productId)){
+        throw new ApiError(400, "Invalid Product Id");
+    }
 
-// Delete from Cart
+    const product = await Product.findById(productId);
+    if(!product){
+        throw new ApiError(404, "Product not found");
+    }
 
-// Get Cart
+    const user = await User.findOne({
+        _id: req.user?._id,
+        "cart.productId": productId
+    });
+
+    if(user){
+        await User.updateOne(
+            {
+                _id: req.user?._id,
+                "cart.productId": productId
+            },
+            {
+                $inc:{
+                    "cart.$.quantity": 1
+                }
+            }
+        );
+    }else{
+        await User.findByIdAndUpdate(
+            req.user?._id,
+            {
+                $push:{
+                    cart:{
+                        productId,
+                        quantity: 1
+                    }
+                }
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+    }
+
+    const updatedUser = await User.findById(req.user?._id).select("-password -refreshToken");
+
+    return res.status(200).json(
+        new ApiResponse(200, {cart: updatedUser.cart}, "Product added to cart successfully")
+    )
+    
+});
+
+// Remove from Cart
+const removeFromCart = asyncHandler(async (req, res) => {
+    const {productId} = req.query;
+    if(!mongoose.isValidObjectId(productId)){
+        throw new ApiError(400, "Invalid Product Id");
+    }
+
+    const product = await Product.findById(productId);
+    if(!product){
+        throw new ApiError(404, "Product not found");
+    }
+
+    const user = await User.findOne({
+        _id: req.user?._id,
+        "cart.productId": productId
+    })
+
+    if(!user){
+        throw new ApiError(404, "Product not found in cart");
+    }
+
+    const cartItem = user.cart.find(item => item.productId.toString() === productId);
+
+    if (!cartItem) {
+        throw new ApiError(404, "Product not found in the cart");
+    }
+
+    if(cartItem.quantity > 1){
+        await User.updateOne(
+            {
+                _id: req.user?._id,
+                "cart.productId": productId
+            },
+            {
+                $inc:{
+                    "cart.$.quantity": -1
+                }
+            }
+        );
+    }else{
+        await User.updateOne(
+            {
+                _id: req.user?._id
+            },
+            {
+                $pull:{
+                    cart:{productId}
+                }
+            }
+        );
+    }
+
+    const updatedUser = await User.findById(req.user?._id).select("-password -refreshToken");
+
+    return res.status(200).json(
+        new ApiResponse(200, {cart: updatedUser.cart}, "Product removed from cart successfully")
+    )
+
+        
+});
+
+// View Cart
+const viewCart = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user?._id).populate(
+        {
+            path: 'cart.productId',
+            model: 'Product',
+            populate:[
+                {
+                    path: 'subCategory',
+                    model: 'SubCategory',
+                    select: 'name basePrice'
+                },
+                {
+                    path: 'productType',
+                    model: 'ProductType',
+                    select: 'name'
+                }
+            ]
+        }
+    );
+
+    if(!user){
+        throw new ApiError(404, "User not found");
+    }
+
+    const cartItems = user.cart.map(item =>{
+        const product = item.productId;
+        const basePrice = product.subCategory?.basePrice || 0;
+        const additionalPrice = product.additionalPrice || 0;
+        const quantity = item.quantity;
+
+        const productPrice = basePrice + additionalPrice;
+        const totalPrice = productPrice * quantity;
+
+        return{
+            name: product.name,
+            productType: product.productType?.name || "No ProductType",
+            subCategory: product.subCategory?.name || "No SubCategory",
+            images: product.images,
+            productPrice,
+            totalPrice,
+            quantity
+        }
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, {cartItems}, "Cart viewed successfully")
+    )
+});
 
 export {
     registerUser,
@@ -330,5 +492,8 @@ export {
     changePassword,
     updateName,
     updateAvatar,
-    getUserDetails
+    getUserDetails,
+    addToCart,
+    removeFromCart,
+    viewCart
 };
