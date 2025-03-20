@@ -317,6 +317,80 @@ const deleteProduct = asyncHandler(async (req, res, next) => {
     );
 });
 
+// View Product Details
+const getProductDetails = asyncHandler(async (req, res, next) => {
+    const { productId } = req.query;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new ApiError(400, "Invalid product ID format");
+    }
+
+    const product = await Product.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(productId)
+            }
+        },
+        {
+            $lookup:{
+                from: 'subcategories',
+                localField: 'subCategory',
+                foreignField: '_id',
+                as: 'subCategory'
+            }
+        },
+        {
+            $unwind:{
+                path: "$subCategory",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $addFields: {
+                basePrice: {
+                    $cond: {
+                        if: { $ifNull: ["$subCategory.basePrice", false] },
+                        then: { $toDouble: "$subCategory.basePrice" },
+                        else: 0
+                    }
+                },
+                additionalPrice: { 
+                    $toDouble: { $ifNull: ["$additionalPrice", 0] } 
+                }
+            }
+        },
+        {
+            $addFields: {
+                totalPrice: { 
+                    $add: ["$basePrice", "$additionalPrice"] 
+                }
+            }
+        },
+        {
+            $project:{
+                _id: 0,
+                name: 1,
+                productType: 1,
+                subCategory:{ $ifNull: ["$subCategory._id", null] },
+                description: 1,
+                images: 1,
+                totalPrice: 1,
+                stock: 1,
+                createdAt: 1,
+                updatedAt: 1
+            }
+        }
+    ]);
+
+    if (!product || product.length === 0) {
+        throw new ApiError(404, "Product not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, { product: product[0] }, "Product Details Displayed successfully")
+    )
+});
+
 
 export {
     createProduct,
@@ -324,5 +398,6 @@ export {
     updateProductDetails,
     deleteProductImage,
     addProductImages,
-    deleteProduct
+    deleteProduct,
+    getProductDetails
 };
