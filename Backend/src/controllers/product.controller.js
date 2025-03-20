@@ -8,8 +8,9 @@ import {uploadMultipleOnCloudinary} from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import {deleteFromCloudinary} from "../utils/cloudinary.js";
 
-// Create Product
 // Reviews and Discount left
+
+// Create Product
 const createProduct = asyncHandler(async (req, res, next) => {
     const{name, productTypeName, subCategoryName, description, additionalPrice, stock} = req.body;
     //console.log("create product body: ",req.body);
