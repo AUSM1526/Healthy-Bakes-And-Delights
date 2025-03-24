@@ -153,7 +153,7 @@ const placeCartOrder = asyncHandler(async (req, res, next) => {
         address: defaultAddress._id
     });
 
-    const qrCode = await generateUPIQRCode(upiId, name, total, createdOrder._id);
+    const qrCode = await generateUPIQRCode(total, createdOrder._id);
 
     const bulkOps = user.cart.map(item => ({
         updateOne:{
