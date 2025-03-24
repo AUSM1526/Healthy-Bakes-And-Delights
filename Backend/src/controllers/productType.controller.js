@@ -3,6 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { ProductType } from "../models/productType.model.js";
 import mongoose from "mongoose";
+import { Product } from "../models/product.model.js";
 
 // Add ProductType
 const addProductType = asyncHandler(async (req, res, next) => {
@@ -49,7 +50,7 @@ const getAllProductTypes = asyncHandler(async (req, res, next) => {
 // Update a ProductType
 const updateProductType = asyncHandler(async (req, res, next) => {
     const { name, hasSubCategories } = req.body;
-    const { productTypeid } = req.params;
+    const { productTypeid } = req.query;
 
     if (!mongoose.Types.ObjectId.isValid(productTypeid)) {
             throw new ApiError(400, "Invalid productType ID format");
@@ -75,12 +76,16 @@ const updateProductType = asyncHandler(async (req, res, next) => {
 });
 
 // Delete a ProductType
-// Left to check if linked to any product or not
 const deleteProductType = asyncHandler(async (req, res, next) => {
-    const { productTypeid } = req.params;
-
+    const { productTypeid } = req.query;
+    //console.log("PID: ",productTypeid);
     if (!mongoose.Types.ObjectId.isValid(productTypeid)) {
         throw new ApiError(400, "Invalid productType ID format");
+    }
+
+    const isAssociated = await Product.exists({productType: productTypeid});
+    if (isAssociated) {
+        throw new ApiError(400, "Cannot Delete since Product Type is associated with a product");
     }
 
     const deleteProductType = await ProductType.findByIdAndDelete(productTypeid);

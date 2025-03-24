@@ -4,6 +4,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { ProductType } from "../models/productType.model.js";
 import { SubCategory } from "../models/subCategory.model.js";
 import mongoose from "mongoose";
+import { Product } from "../models/product.model.js";
 
 // Create a new subCategory
 const createSubCategory = asyncHandler(async (req, res, next) => {
@@ -79,12 +80,16 @@ const updateSubCategory = asyncHandler(async (req, res, next) => {
 });
 
 // Delete a subCategory
-// Need to check if linked with any product
 const deleteSubCategory = asyncHandler(async (req, res, next) => {
     const {subCategoryId} = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(subCategoryId)) {
         throw new ApiError(400, "Invalid subCategory ID format");
+    }
+
+    const isAssociated = await Product.exists({subCategory: subCategoryId});
+    if (isAssociated) {
+        throw new ApiError(400, "Cannot Delete since Sub Category is associated with a product");
     }
 
     await SubCategory.findByIdAndDelete(subCategoryId);
