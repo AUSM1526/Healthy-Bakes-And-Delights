@@ -7,7 +7,10 @@ import jwt from "jsonwebtoken";
 import {deleteFromCloudinary} from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import {Product} from "../models/product.model.js";
-import {Order} from "../models/order.model.js";
+import {OTP} from "../models/otp.model.js";
+import { mailSender } from "../utils/mailSender.js";
+import {otpTemplate} from "../mailTemplates/emailVerification.js";
+import bcrypt from "bcrypt";
 
 //Function to genearate access and refresh token
 const generateAccessAndRefreshToken = async (userId) => {
@@ -25,6 +28,58 @@ const generateAccessAndRefreshToken = async (userId) => {
         throw new ApiError(500, "Token generation failed");
     }
 }
+
+// sendOtp Function
+const sendOtp = asyncHandler(async (req, res) => {
+    const {email} = req.body;
+    if(!email){
+        throw new ApiError(400, "Email is required");
+    }
+
+    const user = await User.findOne({email});
+    if(user){
+        throw new ApiError(400, "User already Registered");
+    }
+    
+    const otp = `${Math.floor(1000 + Math.random()*9000)}`;
+    const hashedOtp = await bcrypt.hash(otp, 10);
+    
+    const newotp = await OTP.create({
+        email,
+        otp: hashedOtp,
+    })
+    
+    const body = otpTemplate(otp,process.env.MAIL_USER);
+    
+    await mailSender(email, "OTP Verification",body);
+    return res.status(200).json(
+        new ApiResponse(200, {newotp}, "OTP sent successfully")
+    );
+});
+
+// verify otp Function
+const verifyOtp = asyncHandler(async (req, res) => {
+    const {email, otp} = req.body;
+    if(!email || !otp){
+        throw new ApiError(400, "Email and OTP are required");
+    }
+    
+    const existingOtp = await OTP.findOne({email});
+    if(!existingOtp){
+        throw new ApiError(404, "OTP not found or expired");
+    }
+
+    const isOtpValid = await bcrypt.compare(otp, existingOtp.otp);
+    if(!isOtpValid){
+        throw new ApiError(400, "Invalid OTP");
+    }
+
+    //await OTP.deleteOne({email});
+    
+    return res.status(200).json(
+        new ApiResponse(200, {}, "Email verified successfully")
+    );
+});
 
 // Register Function
 const registerUser = asyncHandler(async (req, res) => {
@@ -596,5 +651,7 @@ export {
     removeFromCart,
     viewCart,
     getOrderHistory,
-    getOrdersByStatus
+    getOrdersByStatus,
+    sendOtp,
+    verifyOtp
 };

@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {registerUser,loginUser,logoutUser,refreshAccessToken,changePassword,updateName,updateAvatar, getUserDetails, addToCart, removeFromCart, viewCart,getOrderHistory, getOrdersByStatus} from "../controllers/user.controller.js";
+import {registerUser,loginUser,logoutUser,refreshAccessToken,changePassword,updateName,updateAvatar, getUserDetails, addToCart, removeFromCart, viewCart,getOrderHistory, getOrdersByStatus, sendOtp, verifyOtp} from "../controllers/user.controller.js";
 import {upload} from "../middlewares/multer.middleware.js";
 import {verifyJWT} from "../middlewares/auth.middleware.js";
 
@@ -19,5 +19,7 @@ userRouter.route("/remove-from-cart").delete(verifyJWT,removeFromCart);
 userRouter.route("/view-cart").get(verifyJWT,viewCart);
 userRouter.route("/order-history").get(verifyJWT, getOrderHistory);
 userRouter.route("/orders-by-status").get(verifyJWT, getOrdersByStatus);
+userRouter.route("/send-otp").post(sendOtp);
+userRouter.route("/verify-otp").post(verifyOtp);
 
 export default userRouter;
