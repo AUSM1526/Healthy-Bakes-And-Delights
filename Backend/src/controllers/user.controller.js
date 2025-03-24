@@ -355,13 +355,65 @@ const getOrderHistory = asyncHandler(async (req, res) => {
         {
             $group:{
                 _id: userId,
-                orderList: {$push: "$orderHistory"}
+                orderHistory: {$push: "$orderHistory"}
             }
         }
     ]);
 
     return res.status(200).json(
         new ApiResponse(200, {orders}, "Order History fetched successfully")
+    );
+});
+
+// Get All Orders by status
+const getOrdersByStatus = asyncHandler(async (req, res, next) => {
+    const { orderStatus } = req.query;
+    const userId = req.user?._id;
+    const user = await User.findById(userId).select("-password -refreshToken");
+    if(!user){
+        throw new ApiError(404, "User not found");
+    }
+
+    const orders = await User.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $lookup:{
+                from: 'orders',
+                localField: '_id',
+                foreignField: 'user',
+                as: 'orderHistory',
+                pipeline:[
+                    {
+                        $match:{
+                            status: String(orderStatus)
+                        }
+                    },
+                    {
+                        $project:{
+                            "products.product": 1,
+                            "products.quantity": 1,
+                            "products.price": 1,
+                            status: 1,
+                            totalPrice: 1,
+                            createdAt: 1,
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $project:{
+                orderHistory: 1
+            }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, {orders}, "Order History By Status fetched successfully")
     )
 });
 
@@ -543,5 +595,6 @@ export {
     addToCart,
     removeFromCart,
     viewCart,
-    getOrderHistory
+    getOrderHistory,
+    getOrdersByStatus
 };
