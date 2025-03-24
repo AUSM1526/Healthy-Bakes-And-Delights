@@ -15,7 +15,8 @@ const orderSchema = new Schema(
                 },
                 quantity:{
                     type: Number,
-                    required: true
+                    required: true,
+                    min: 1
                 },
                 price:{
                     type: Number,
@@ -29,14 +30,14 @@ const orderSchema = new Schema(
         },
         status:{
             type: String,
-            enum: ["Pending", "Shipped", "Delivered", "Cancelled"], 
+            enum: ["Pending", "Shipped", "Delivered", "Cancelled", "Not Approved"], 
             default: "Pending"
         },
         paymentInfo:{
             method:{
                 type:String,
                 enum: ["COD", "Card", "UPI"],
-                required: true
+                //required: true
             },
             transactionId:{
                 type:String
@@ -46,6 +47,14 @@ const orderSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "Address",
             required: true
+        },
+        screenshot:{
+            type: String,
+            default: null
+        },
+        isApproved:{
+            type: Boolean,
+            default: false
         },
         discount:[{
             type: Schema.Types.ObjectId,
