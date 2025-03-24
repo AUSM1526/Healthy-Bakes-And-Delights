@@ -45,12 +45,6 @@ const userSchema = new Schema(
         avatar:{
             type:String 
         },
-        orderHistory:[
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'Order'
-            }
-        ],
         cart:[
             {
                 productId: {

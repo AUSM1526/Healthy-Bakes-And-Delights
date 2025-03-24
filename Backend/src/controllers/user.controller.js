@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import {deleteFromCloudinary} from "../utils/cloudinary.js";
 import mongoose from "mongoose";
 import {Product} from "../models/product.model.js";
+import {Order} from "../models/order.model.js";
 
 //Function to genearate access and refresh token
 const generateAccessAndRefreshToken = async (userId) => {
@@ -317,6 +318,52 @@ const getUserDetails = asyncHandler(async (req, res) => {
 });
 
 // Get Order History
+const getOrderHistory = asyncHandler(async (req, res) => {
+    const userId = req.user?._id;
+    const user = await User.findById(userId).select("-password -refreshToken");
+    if(!user){
+        throw new ApiError(404, "User not found");
+    }
+
+    const orders = await User.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(userId)
+            }
+        },
+        {
+            $lookup:{
+                from: 'orders',
+                localField: '_id',
+                foreignField: 'user',
+                as: 'orderHistory'
+            }
+        },
+        {
+            $unwind: "$orderHistory"
+        },
+        {
+            $project:{
+                "orderHistory.status": 1,                     
+                "orderHistory.products.product": 1,          
+                "orderHistory.products.price": 1,            
+                "orderHistory.products.quantity": 1,         
+                "orderHistory.totalPrice": 1,       
+                "orderHistory.createdAt": 1 
+            }
+        },
+        {
+            $group:{
+                _id: userId,
+                orderList: {$push: "$orderHistory"}
+            }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, {orders}, "Order History fetched successfully")
+    )
+});
 
 // Add to Cart
 const addToCart = asyncHandler(async (req, res) => {
@@ -495,5 +542,6 @@ export {
     getUserDetails,
     addToCart,
     removeFromCart,
-    viewCart
+    viewCart,
+    getOrderHistory
 };
