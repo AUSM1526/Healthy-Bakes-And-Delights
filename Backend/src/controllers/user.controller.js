@@ -64,12 +64,13 @@ const verifyOtp = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Email and OTP are required");
     }
     
-    const existingOtp = await OTP.findOne({email});
-    if(!existingOtp){
+    const existingOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
+    //console.log("EOTP: ",existingOtp);
+    if(existingOtp.length === 0){   
         throw new ApiError(404, "OTP not found or expired");
     }
 
-    const isOtpValid = await bcrypt.compare(otp, existingOtp.otp);
+    const isOtpValid = await bcrypt.compare(otp, existingOtp[0].otp);
     if(!isOtpValid){
         throw new ApiError(400, "Invalid OTP");
     }
