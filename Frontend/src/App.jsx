@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import EmailVerification from "./pages/EmailVerification";
+import Register from "./pages/Register";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -8,7 +8,7 @@ const App = () => {
     <Router>
       <Toaster position="top-center" reverseOrder={false} />
       <Routes>
-        <Route path="/emailVerification" element={<EmailVerification/>}/>
+        <Route path="/register" element={<Register/>}/>
       </Routes>
     </Router>
   );

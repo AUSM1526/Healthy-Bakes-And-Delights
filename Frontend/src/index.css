@@ -1,7 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 :root {
   --background: 36, 30%, 78%; /* Beige/tan #d8cbb7 */
@@ -99,5 +99,13 @@
 
 .service-card {
   @apply bg-white rounded-lg p-6 flex flex-col items-center justify-center shadow-sm;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
 }
 
