@@ -93,9 +93,7 @@ const OTP = (props) => {
         </div>
       </div>
     );
-      
-      
-      
+       
 };
 
 export default OTP;
