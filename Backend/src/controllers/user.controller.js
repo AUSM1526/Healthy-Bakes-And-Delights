@@ -57,39 +57,14 @@ const sendOtp = asyncHandler(async (req, res) => {
     );
 });
 
-// verify otp Function
-const verifyOtp = asyncHandler(async (req, res) => {
-    const {email, otp} = req.body;
-    if(!email || !otp){
-        throw new ApiError(400, "Email and OTP are required");
-    }
-    
-    const existingOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
-    //console.log("EOTP: ",existingOtp);
-    if(existingOtp.length === 0){   
-        throw new ApiError(404, "OTP not found or expired");
-    }
-
-    const isOtpValid = await bcrypt.compare(otp, existingOtp[0].otp);
-    if(!isOtpValid){
-        throw new ApiError(400, "Invalid OTP");
-    }
-
-    //await OTP.deleteOne({email});
-    
-    return res.status(200).json(
-        new ApiResponse(200, {}, "Email verified successfully")
-    );
-});
-
 // Register Function
 const registerUser = asyncHandler(async (req, res) => {
    // get user details from frontend
-   const {username, email, firstName, lastName, phoneNumber,password} = req.body;
+   const {username, email, firstName, lastName, phoneNumber,password, otp} = req.body;
    const accountType = "user"; // for now only users can register
 
     // validate user data - not empty
-    if(!username || !email || !lastName || !firstName || !phoneNumber || !password){
+    if(!username || !email || !lastName || !firstName || !phoneNumber || !password || !otp){
         throw new ApiError(400, "All fields are required");
     }
 
@@ -104,14 +79,25 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "User already exists");
     }
 
+    const existingOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
+    //console.log("EOTP: ",existingOtp);
+    if(existingOtp.length === 0){   
+        throw new ApiError(404, "OTP not found or expired");
+    }
+
+    const isOtpValid = await bcrypt.compare(otp, existingOtp[0].otp);
+    if(!isOtpValid){
+        throw new ApiError(400, "Invalid OTP");
+    }
+
     // Get avatarPath
     const avatarLocalPath = req.file?.path;
     console.log("Req.file: ",req.file?.path);
 
     // uploading avatar to cloudinary
     const avatar = await uploadOnCloudinary(avatarLocalPath);
-    console.log(avatar);
-    console.log(avatar.url);
+    // console.log(avatar);
+    // console.log(avatar.url);
 
     // create user object
     const user = await User.create({
@@ -653,6 +639,5 @@ export {
     viewCart,
     getOrderHistory,
     getOrdersByStatus,
-    sendOtp,
-    verifyOtp
+    sendOtp
 };
