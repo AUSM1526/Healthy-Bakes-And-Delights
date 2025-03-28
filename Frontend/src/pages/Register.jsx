@@ -21,7 +21,7 @@ const Register = () => {
         setFormData((prev) => ({...prev, [name]: value}));
     }
 
-    const handleRegisterSubmit = (e) => {
+    const handleRegisterSubmit = async(e) => {
         e.preventDefault();
 
         const {username,firstName,lastName,phoneNumber,password,email} = formData;
@@ -33,13 +33,18 @@ const Register = () => {
         
         setLoading(true);
         try {
-            apiClient.post("/user/send-otp",{email});
-            toast.success("OTP sent successfully");
-            setOtpsent(true);
+            const response = await apiClient.post("/user/send-otp", { email });
+            if (response?.data?.statusCode === 200) {
+                toast.success("OTP sent successfully");
+                setOtpsent(true);
+            }
         } catch (error) {
-            toast.error(error.response.data.message);
-        }
-        finally{
+            if (error?.response?.statusCode === 400 && error?.response?.data?.message === "User already Registered") {
+                toast.error("User already exists! Please log in.");
+            } else {
+                toast.error(`${error.response?.data?.message} Please login` || "Failed to send OTP");
+            }
+        } finally {
             setLoading(false);
         }
     }
@@ -174,7 +179,7 @@ const Register = () => {
                     <span className="animate-pulse mr-2">Registering...</span>
                 </div>
                 ) : (
-                "Verify Email"
+                "Register"
                 )}
             </button>
             </>
