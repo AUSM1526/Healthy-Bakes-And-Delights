@@ -50,147 +50,165 @@ const Register = () => {
     }
   
     return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#f0e7db] to-[#d9c7ac] p-6">
-      {/* Register Header */}
-      <h2 className="text-5xl font-bold text-[#4A2C1A] mb-10 tracking-wide text-center drop-shadow-md">
-        Register
-      </h2>
-  
-      <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl p-10 transition-transform hover:scale-105 duration-300">
-        {/* Branding */}
-        <h2 className="text-4xl text-[#4A2C1A] text-center mb-10 font-playfair leading-snug tracking-wide">
-          Healthy Bakes & Delights
-        </h2>
-  
-        <form onSubmit={handleRegisterSubmit} className="space-y-6">
-          {!otpsent && (
-            <>
-            {/* Username */}
-            <div>
-                <label htmlFor="username" className="block text-lg font-medium text-gray-700">
-                Username
-                </label>
-                <input
-                id="username"
-                name="username"
-                type="text"
-                value={formData.username}
-                onChange={handleFormDataChange}
-                placeholder="Enter username"
-                className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
-                required
-                />
-            </div>
-    
-            {/* First Name and Last Name */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                <label htmlFor="firstName" className="block text-lg font-medium text-gray-700">
-                    First Name
-                </label>
-                <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    value={formData.firstName}
-                    onChange={handleFormDataChange}
-                    placeholder="First Name"
-                    className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
-                    required
-                />
-                </div>
-    
-                <div>
-                <label htmlFor="lastName" className="block text-lg font-medium text-gray-700">
-                    Last Name
-                </label>
-                <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    value={formData.lastName}
-                    onChange={handleFormDataChange}
-                    placeholder="Last Name"
-                    className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
-                    required
-                />
-                </div>
-            </div>
-    
-            {/* Phone Number */}
-            <div>
-                <label htmlFor="phoneNumber" className="block text-lg font-medium text-gray-700">
-                Phone Number
-                </label>
-                <input
-                id="phoneNumber"
-                name="phoneNumber"
-                type="tel"
-                value={formData.phoneNumber}
-                onChange={handleFormDataChange}
-                placeholder="Enter phone number"
-                className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
-                required
-                />
-            </div>
-    
-            {/* Email */}
-            <div>
-                <label htmlFor="email" className="block text-lg font-medium text-gray-700">
-                Email
-                </label>
-                <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleFormDataChange}
-                placeholder="Enter your email"
-                className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
-                required
-                />
-            </div>
-    
-            {/* Password */}
-            <div>
-                <label htmlFor="password" className="block text-lg font-medium text-gray-700">
-                Password
-                </label>
-                <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleFormDataChange}
-                placeholder="Enter password"
-                className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
-                required
-                />
-            </div>
-    
-            {/* Submit Button */}
-            <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#4A2C1A] text-white py-4 rounded-xl hover:bg-[#3A2314] transition-all shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 flex items-center justify-center"
-            >
-                {loading ? (
-                <div className="flex items-center">
-                    <span className="animate-pulse mr-2">Registering...</span>
-                </div>
-                ) : (
-                "Register"
-                )}
-            </button>
-            </>
-          )}
-        </form>
-        
-        {otpsent && <OTP {...formData}/>}
-        
-      </div>
-    </div>
-  );
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#f0e7db] to-[#d9c7ac] p-6">
+          {/* Register Header */}
+          <h2 className="text-5xl font-bold text-[#4A2C1A] mb-10 tracking-wide text-center drop-shadow-md">
+            Register
+          </h2>
+      
+          <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl p-10 transition-transform hover:scale-105 duration-300">
+            {/* Branding */}
+            <h2 className="text-4xl text-[#4A2C1A] text-center mb-10 font-playfair leading-snug tracking-wide">
+              Healthy Bakes & Delights
+            </h2>
+      
+            <form onSubmit={handleRegisterSubmit} className="space-y-6">
+              {!otpsent && (
+                <>
+                  {/* Username */}
+                  <div>
+                    <label htmlFor="username" className="block text-lg font-medium text-gray-700">
+                      Username
+                    </label>
+                    <input
+                      id="username"
+                      name="username"
+                      type="text"
+                      value={formData.username}
+                      onChange={handleFormDataChange}
+                      placeholder="Enter username"
+                      className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
+                      required
+                    />
+                  </div>
+      
+                  {/* First Name and Last Name */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="firstName" className="block text-lg font-medium text-gray-700">
+                        First Name
+                      </label>
+                      <input
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                        value={formData.firstName}
+                        onChange={handleFormDataChange}
+                        placeholder="First Name"
+                        className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
+                        required
+                      />
+                    </div>
+      
+                    <div>
+                      <label htmlFor="lastName" className="block text-lg font-medium text-gray-700">
+                        Last Name
+                      </label>
+                      <input
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                        value={formData.lastName}
+                        onChange={handleFormDataChange}
+                        placeholder="Last Name"
+                        className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
+                        required
+                      />
+                    </div>
+                  </div>
+      
+                  {/* Phone Number */}
+                  <div>
+                    <label htmlFor="phoneNumber" className="block text-lg font-medium text-gray-700">
+                      Phone Number
+                    </label>
+                    <input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      type="tel"
+                      value={formData.phoneNumber}
+                      onChange={handleFormDataChange}
+                      placeholder="Enter phone number"
+                      className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
+                      required
+                    />
+                  </div>
+      
+                  {/* Email */}
+                  <div>
+                    <label htmlFor="email" className="block text-lg font-medium text-gray-700">
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleFormDataChange}
+                      placeholder="Enter your email"
+                      className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
+                      required
+                    />
+                  </div>
+      
+                  {/* Password */}
+                  <div>
+                    <label htmlFor="password" className="block text-lg font-medium text-gray-700">
+                      Password
+                    </label>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={handleFormDataChange}
+                      placeholder="Enter password"
+                      className="mt-2 block w-full p-4 border rounded-lg focus:ring-4 focus:ring-[#4A2C1A] focus:outline-none bg-[#f8f1e8] text-gray-900 shadow-sm transition-all hover:shadow-md"
+                      required
+                    />
+                  </div>
+      
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-[#4A2C1A] text-white py-4 rounded-xl hover:bg-[#3A2314] transition-all shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 flex items-center justify-center"
+                  >
+                    {loading ? (
+                      <div className="flex items-center">
+                        <span className="animate-pulse mr-2">Registering...</span>
+                      </div>
+                    ) : (
+                      "Register"
+                    )}
+                  </button>
+                </>
+              )}
+            </form>
+      
+            {/* OTP Section */}
+            {otpsent && <OTP {...formData} />}
+      
+            {!otpsent && (
+                <>
+                    {/* Login Link */}
+                    <div className="mt-6 text-center">
+                    <p className="text-gray-700">
+                        Already have an account?{" "}
+                        <a
+                        href="/login"
+                        className="text-[#4A2C1A] hover:text-[#3A2314] transition-colors font-medium underline"
+                        >
+                        Login
+                        </a>
+                    </p>
+                    </div>
+                </>
+            )}
+          </div>
+        </div>
+      );
+      
   
 };
 
