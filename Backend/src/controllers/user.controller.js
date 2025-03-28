@@ -142,13 +142,13 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if(!user){
-        throw new ApiError(404, "User not registered");
+        throw new ApiError(404, "User not registered Please Create an account first");
     }
 
     const isPassword = await user.isPasswordCorrect(password);
 
     if(!isPassword){
-        throw new ApiError(401, "Invalid password");
+        throw new ApiError(401, "Invalid password Please try again");
     }
 
     // generate access and refresh token
