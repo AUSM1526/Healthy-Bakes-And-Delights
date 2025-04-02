@@ -12,11 +12,11 @@ const Navbar = () => {
     return (
       <>
         {!isLoggedIn && (
-          <header className="fixed top-0 left-0 w-full z-50 bg-transparent hover:bg-chocolate-light transition duration-300 shadow-md backdrop-blur-sm">
+          <header className="fixed top-0 left-0 w-full z-50 bg-transparent hover:bg-chocolate-light transition duration-300 shadow-md backdrop-blur-sm group">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
                 {/* Brand Name */}
-                <div className="text-2xl font-playfair font-bold text-chocolate-dark tracking-wide">
+                <div className="text-2xl font-playfair font-bold text-white group-hover:text-chocolate-dark transition-colors duration-300 tracking-wide">
                   Healthy Bakes & Delights
                 </div>
 
@@ -26,7 +26,7 @@ const Navbar = () => {
                     <Link
                       key={item}
                       to={`/${item.toLowerCase().replace(" ", "-")}`}
-                      className="text-chocolate-dark text-lg font-medium transition hover:text-chocolate-gold"
+                      className="text-white group-hover:text-chocolate-dark hover:text-chocolate-gold group-hover:hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
                     >
                       {item}
                     </Link>
