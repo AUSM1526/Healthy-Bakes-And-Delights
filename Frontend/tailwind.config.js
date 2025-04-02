@@ -51,6 +51,8 @@ export default {
             medium: '#a9a29a', // Medium gray/beige
             accent: '#e9dcc8', // Slightly darker beige for sections
             gold: '#d4a74a', // Gold accent color
+            buttonColor: '#4A2C1A', // Dark brown for buttons
+            buttonHover: '#3A2314', // Darker brown for button hover
           },
         },
         borderRadius: {
