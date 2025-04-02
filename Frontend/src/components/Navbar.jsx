@@ -12,7 +12,7 @@ const Navbar = () => {
     return (
       <>
         {!isLoggedIn && (
-          <header className="bg-chocolate-light shadow-md">
+          <header className="fixed top-0 left-0 w-full z-50 bg-transparent hover:bg-chocolate-light transition duration-300 shadow-md backdrop-blur-sm">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
                 {/* Brand Name */}
