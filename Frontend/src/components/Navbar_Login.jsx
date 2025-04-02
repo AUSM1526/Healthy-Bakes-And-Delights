@@ -19,12 +19,12 @@ const Navbar_Login = () => {
     }, [menuOpen]);
     
     return (
-        <header className="fixed top-0 left-0 w-full z-50 bg-transparent hover:bg-chocolate-light transition duration-300 shadow-md backdrop-blur-sm group">
+        <header className="fixed top-0 left-0 w-full z-50 bg-chocolate-light transition duration-300 shadow-md backdrop-blur-sm">
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
 
                     {/* Brand Name */}
-                    <div className="text-2xl font-playfair font-bold text-white group-hover:text-chocolate-dark transition-colors duration-300 tracking-wide">
+                    <div className="text-2xl font-playfair font-bold text-chocolate-dark transition-colors duration-300 tracking-wide">
                         Healthy Bakes & Delights
                     </div>
 
@@ -34,7 +34,7 @@ const Navbar_Login = () => {
                             <a
                                 key={item}
                                 href="#"
-                                className="text-white group-hover:text-chocolate-dark hover:text-chocolate-gold group-hover:hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
+                                className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
                             >
                                 {item}
                             </a>
@@ -44,7 +44,7 @@ const Navbar_Login = () => {
                     {/* Cart & User Profile */}
                     <div className="flex items-center gap-6">
                         {/* Cart Icon */}
-                        <a href="/cart" className="text-white group-hover:text-chocolate-dark hover:text-chocolate-gold group-hover:hover:text-chocolate-gold transition-colors duration-300">
+                        <a href="/cart" className="text-chocolate-dark   hover:text-chocolate-gold transition-colors duration-300">
                             <Cart />
                         </a>
 
