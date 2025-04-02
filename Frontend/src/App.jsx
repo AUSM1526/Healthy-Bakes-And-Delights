@@ -2,13 +2,51 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
     <Router>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster 
+          position="top-center"
+          toastOptions={{
+            style: {
+              background: "#3E2723", // Rich Dark Chocolate Background
+              color: "#FCE4D8",      // Soft Creamy Text
+              borderRadius: "12px",
+              border: "2px solid #8D6E63", // Chocolate Brown Border
+              padding: "14px 18px",
+              fontSize: "16px",
+              fontFamily: "'Playfair Display', serif",
+              boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.25)",
+            },
+            success: {
+              style: {
+                background: "#4E342E",  // Deep Chocolate Brown
+                color: "#FFDAB9",       // Peachy Cream Text
+                borderLeft: "6px solid #D7A86E", // Golden Toasted Highlight
+              },
+              iconTheme: {
+                primary: "#D7A86E", // Golden Success Icon
+                secondary: "#FFF5E1",
+              },
+            },
+            error: {
+              style: {
+                background: "#8B4513",  // Burnt Chocolate for Errors
+                color: "#FFEBD2",       // Warm Vanilla Text
+                borderLeft: "6px solid #E57373", // Soft Reddish Highlight
+              },
+              iconTheme: {
+                primary: "#E57373", // Error Icon in Subtle Red
+                secondary: "#FFF5E1",
+              },
+            },
+          }}
+      />
       <Routes>
+        <Route path="/" element={<Home />}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
       </Routes>
