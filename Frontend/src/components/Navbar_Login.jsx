@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Cart from "./Cart";
 import Logout from "./Logout";
+import { Link } from "react-router-dom";
 
 const Navbar_Login = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -30,14 +31,19 @@ const Navbar_Login = () => {
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex md:gap-8">
-                        {["Home", "Products", "About Us", "Contact Us"].map((item) => (
-                            <a
-                                key={item}
-                                href="#"
-                                className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
+                        {[
+                            { name: "Home", path: "/" },
+                            { name: "Products", path: "/products" },
+                            { name: "About Us", path: "/about" },
+                            { name: "Contact Us", path: "/contact" },
+                        ].map((item) => (
+                            <Link
+                            key={item.name}
+                            to={item.path}
+                            className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
                             >
-                                {item}
-                            </a>
+                            {item.name}
+                            </Link>
                         ))}
                     </nav>
 

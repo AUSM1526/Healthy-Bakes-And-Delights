@@ -22,13 +22,18 @@ const Navbar = () => {
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex md:gap-8">
-                  {["Home", "Products", "About Us", "Contact Us"].map((item) => (
+                  {[
+                      { name: "Home", path: "/" },
+                      { name: "Products", path: "/products" },
+                      { name: "About Us", path: "/about" },
+                      { name: "Contact Us", path: "/contact" },
+                  ].map((item) => (
                     <Link
-                      key={item}
-                      to={`/${item.toLowerCase().replace(" ", "-")}`}
+                      key={item.name}
+                      to={item.path}
                       className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
                     >
-                      {item}
+                    {item.name}
                     </Link>
                   ))}
                 </nav>
