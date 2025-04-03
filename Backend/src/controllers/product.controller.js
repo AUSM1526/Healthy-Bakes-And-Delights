@@ -141,7 +141,8 @@ const getProductsWithSubcategory = asyncHandler(async (req, res, next) => {
                     $push: {
                         name: { $ifNull: ["$subCategory.name", null] },
                         price: "$totalPrice",
-                        stock: "$stock"
+                        stock: "$stock",
+                        images: "$images",
                     }
                 }
             }
