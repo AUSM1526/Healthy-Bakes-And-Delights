@@ -27,6 +27,7 @@ const Products = () => {
                         name: sub.name || "Standard",
                         price: sub.price,
                         stock: sub.stock,
+                        description: sub.description,
                         images: sub.images.length > 0 ? sub.images : Deadpool
                     }))
                 }));
@@ -39,23 +40,24 @@ const Products = () => {
         allProducts();
     },[]);
 
-    return(
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {products.map((product) => (
-                <ProductCard
-                    key={product.productName}
-                    name={product.productName}
-                    productType = {product.productType === "Chocolate" ? "Chocolate" : ""}
-                    imageSrc={product.productsubCategories[0]?.images[0] || Deadpool} // First image of first subcategory
-                    variants={product.productsubCategories.map(sub => ({
-                        type: sub.name,
-                        price: sub.price,
-                        images: sub.images
-                    }))}
-                />
-            ))}
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
+          {products.map((product) => (
+            <ProductCard
+              key={product.productName}
+              name={product.productName}
+              productType={product.productType === "Chocolate" ? "Chocolate" : ""}
+              imageSrc={product.productsubCategories[0]?.images[0]} 
+              variants={product.productsubCategories.map((sub) => ({
+                type: sub.name,
+                price: sub.price,
+                images: sub.images,
+                description: sub.description,
+              }))}
+            />
+          ))}
         </div>
-    );
+      );
     
 };
 
