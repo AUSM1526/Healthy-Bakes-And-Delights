@@ -67,8 +67,6 @@ const ProductCard = ({ name, productType, imageSrc, variants = [] }) => {
     </div>
   );
   
-  
-  
 };
 
 export default ProductCard;
