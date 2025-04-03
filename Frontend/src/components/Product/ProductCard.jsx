@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ShoppingCart } from 'lucide-react';
 
 const ProductCard = ({ name, productType, imageSrc, variants = [] }) => {
   const [selectedVariant, setSelectedVariant] = useState(variants?.[0] || {});
