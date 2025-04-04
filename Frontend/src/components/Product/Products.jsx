@@ -8,6 +8,7 @@ import ProductCard from './ProductCard';
 
 const Products = () => {
     const [products,setProducts]  = useState([]);
+    const [selectedType,setSelectedType] = useState("All Products");
 
     useEffect(() => {
         const allProducts = async() => {
@@ -40,9 +41,31 @@ const Products = () => {
         allProducts();
     },[]);
 
+    const productTypes = ["All Products", ...new Set(products.map((p) => p.productType))];
+
+    const filteredProducts = selectedType === "All Products" ? products : 
+    products.filter((product) => (product.productType === selectedType));
+
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
-          {products.map((product) => (
+        <div>
+          {/* Filter Dropdown */}
+          <div className="flex justify-end mb-6">
+            <select
+              value={selectedType === "All Products" ? "" : selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="border border-[#4A2E19] px-6 py-3 rounded-md shadow-md text-[#4A2E19] font-serif bg-white text-lg"
+            >
+              <option value="" disabled>Select Category</option> {/* Placeholder option */} 
+              {productTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product.productName}
               name={product.productName}
@@ -57,6 +80,8 @@ const Products = () => {
             />
           ))}
         </div>
+        </div>
+        
       );
     
 };
