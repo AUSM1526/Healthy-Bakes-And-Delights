@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import apiClient from "../../utils/apiClient";
+import { apiFunc } from '../../utils/apiClient';
 import toast from "react-hot-toast";
 import Deadpool from "../../assets/Deadpool.jpg";
 import { useEffect } from 'react';
@@ -12,7 +12,7 @@ const Products = () => {
     useEffect(() => {
         const allProducts = async() => {
             try {
-                const response = await apiClient.get("/product/get-products-with-subcategory");
+                const response = await apiFunc().get("/product/get-products-with-subcategory");
                 
                 const fetchedProducts = response?.data?.data.products || [];
                 if(fetchedProducts.length === 0){

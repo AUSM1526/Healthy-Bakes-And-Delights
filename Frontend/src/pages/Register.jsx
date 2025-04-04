@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import OTP from "../components/OTP";
-import apiClient from "../utils/apiClient";
+import {apiFunc} from "../utils/apiClient";
 
 const Register = () => {
     const [formData,setFormData] = useState({
@@ -33,7 +33,7 @@ const Register = () => {
         
         setLoading(true);
         try {
-            const response = await apiClient.post("/user/send-otp", { email });
+            const response = await apiFunc().post("/user/send-otp", { email });
             if (response?.data?.statusCode === 200) {
                 toast.success("OTP sent successfully");
                 setOtpsent(true);

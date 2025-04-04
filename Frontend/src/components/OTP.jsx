@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import apiClient from "../utils/apiClient";
+import {apiFunc} from "../utils/apiClient";
 import OtpInput from "react-otp-input";
 import {useNavigate} from "react-router-dom";
 
@@ -19,7 +19,7 @@ const OTP = (props) => {
         }
 
         setLoading(true);
-        apiClient.post("/user/register", {username, email, firstName, lastName, phoneNumber,password, otp})
+        apiFunc().post("/user/register", {username, email, firstName, lastName, phoneNumber,password, otp})
         .then((res) => {
             toast.success("OTP verified successfully");
             navigate("/login");

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import apiClient from "../utils/apiClient";
+import {apiFunc} from "../utils/apiClient";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { login } from "../store/authSlice";
@@ -29,7 +29,7 @@ const Login = () => {
 
         setLoading(true);
         try {
-            const response = await apiClient.post("/user/login",{email,password});
+            const response = await apiFunc().post("/user/login",{email,password});
             if(response?.data?.statusCode === 200){
                 toast.success("Login Successfull");
                 dispatch(login(response.data.data.user));

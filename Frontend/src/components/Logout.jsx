@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import apiClient from "../utils/apiClient";
+import {apiFunc} from "../utils/apiClient";
 import { useDispatch } from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {logout} from "../store/authSlice";
@@ -14,7 +14,7 @@ const Logout = () => {
 
     const handleLogout = async () => {
         try {
-            const res = await apiClient.post("/user/logout");
+            const res = await apiFunc().post("/user/logout");
             dispatch(logout());
             setConfirmation(false);
             toast.success("Logout successful!");
