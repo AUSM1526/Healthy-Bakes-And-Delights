@@ -48,7 +48,7 @@ const Products = () => {
 
     return (
         <div>
-          {/* Filter Dropdown */}
+          {/* Category Dropdown */}
           <div className="flex justify-end mb-6">
             <select
               value={selectedType === "All Products" ? "" : selectedType}
