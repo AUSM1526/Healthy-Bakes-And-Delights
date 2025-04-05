@@ -22,7 +22,6 @@ const Logout = () => {
         } catch (error) {
             console.log("Logout failed:", error);
             toast.error("Logout failed. Please try again.");
-            
         }
     };
 
