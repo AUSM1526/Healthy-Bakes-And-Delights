@@ -17,7 +17,7 @@ export const apiFunc = () => {
                 console.log("Unauthorized, Please login again!");
                 store.dispatch(logout());
             }
-            return Promise.reject(error);
+            else return Promise.reject(error);
         }
     );
     return apiClient;
