@@ -1,7 +1,9 @@
 import { useState } from "react";
+import {useNavigate} from "react-router-dom";
 
 const ProductCard = ({ name, productType, imageSrc, variants = [] }) => {
   const [selectedVariant, setSelectedVariant] = useState(variants?.[0] || {});
+  const navigate = useNavigate();
 
   return (
     <div className="border border-[#c0a16b] rounded-xl shadow-lg p-5 bg-white
@@ -59,7 +61,14 @@ const ProductCard = ({ name, productType, imageSrc, variants = [] }) => {
       {/* View Product Button */}
       <div className="mt-auto pt-3">
         <button className="w-full border border-[#4A2E19] text-[#4A2E19] hover:bg-[#4A2E19] hover:text-white 
-          py-3 rounded-md transition-all text-lg shadow-md font-serif hover:scale-105 duration-300">
+          py-3 rounded-md transition-all text-lg shadow-md font-serif hover:scale-105 duration-300"
+          onClick={() => navigate("/productDetail", {state: {
+            product:{
+              name,productType,variants
+            },
+            selectedVariant: selectedVariant,
+          }})}
+        >
           View Product
         </button>
       </div>

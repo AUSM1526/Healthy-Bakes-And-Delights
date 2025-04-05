@@ -29,7 +29,8 @@ const Products = () => {
                         price: sub.price,
                         stock: sub.stock,
                         description: sub.description,
-                        images: sub.images.length > 0 ? sub.images : Deadpool
+                        images: sub.images.length > 0 ? sub.images : Deadpool,
+                        productId: sub.productId,
                     }))
                 }));
                 setProducts(displayProducts);
@@ -76,6 +77,8 @@ const Products = () => {
                 price: sub.price,
                 images: sub.images,
                 description: sub.description,
+                productId: sub.productId,
+                stock: sub.stock,
               }))}
             />
           ))}
