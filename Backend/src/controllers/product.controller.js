@@ -144,6 +144,7 @@ const getProductsWithSubcategory = asyncHandler(async (req, res, next) => {
                         stock: "$stock",
                         images: "$images",
                         description: "$description",
+                        productId: "$_id",
                     }
                 }
             }
