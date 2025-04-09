@@ -2,11 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Cart from "./Cart";
 import Logout from "./Logout";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Navbar_Login = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const menuRef = useRef(null);
+    const location = useLocation();
+    const currentPath = location.pathname;
 
     //Close menu when clicking outside
     useEffect(() => {
@@ -36,15 +39,25 @@ const Navbar_Login = () => {
                             { name: "Products", path: "/products" },
                             { name: "About Us", path: "/about" },
                             { name: "Contact Us", path: "/contact" },
-                        ].map((item) => (
-                            <Link
-                            key={item.name}
-                            to={item.path}
-                            className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
-                            >
-                            {item.name}
-                            </Link>
-                        ))}
+                        ].map((item) => {
+                            const isActive = currentPath === item.path;
+                            return isActive ? (
+                                <span
+                                key={item.name}
+                                className="text-chocolate-gold font-semibold text-lg cursor-default transition-colors duration-300"
+                                >
+                                {item.name}
+                                </span>
+                            ) : (
+                                <Link
+                                key={item.name}
+                                to={item.path}
+                                className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
+                                >
+                                {item.name}
+                                </Link>
+                            );
+                        })}
                     </nav>
 
                     {/* Cart & User Profile */}
@@ -118,16 +131,33 @@ const Navbar_Login = () => {
             {/* Mobile Navigation Menu */}
             {mobileMenuOpen && (
                 <div className="md:hidden bg-white shadow-md p-4 space-y-2">
-                    {["Home", "Products", "About Us", "Contact Us"].map((item) => (
-                        <a
-                            key={item}
-                            href="#"
-                            className="block text-chocolate-dark text-lg font-medium transition hover:text-chocolate-gold"
-                            onClick={() => setMobileMenuOpen(false)}
-                        >
-                            {item}
-                        </a>
-                    ))}
+                    {[
+                        { name: "Home", path: "/" },
+                        { name: "Products", path: "/products" },
+                        { name: "About Us", path: "/about" },
+                        { name: "Contact Us", path: "/contact" },
+                        ].map((item) => {
+                                const isActive = currentPath === item.path;
+                                return isActive ? (
+                                    <span
+                                    key={item.name}
+                                    className="block text-chocolate-gold text-lg font-semibold cursor-default"
+                                    >
+                                    {item.name}
+                                    </span>
+                                ) : (
+                                    <Link
+                                    key={item.name}
+                                    to={item.path}
+                                    className="block text-chocolate-dark text-lg font-medium transition hover:text-chocolate-gold"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                    {item.name}
+                                    </Link>
+                                );
+                            }
+                        )
+                    }
                 </div>
             )}
         </header>

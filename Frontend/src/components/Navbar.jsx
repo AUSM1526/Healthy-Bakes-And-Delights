@@ -2,10 +2,13 @@ import React, {useState} from "react";
 import Navbar_Login from "./Navbar_Login";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
     const user = useSelector((state) => state.auth.user);
     const isLoggedIn = Boolean(user);
+    const location = useLocation();
+    const currentPath = location.pathname;
     
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -27,15 +30,25 @@ const Navbar = () => {
                       { name: "Products", path: "/products" },
                       { name: "About Us", path: "/about" },
                       { name: "Contact Us", path: "/contact" },
-                  ].map((item) => (
-                    <Link
-                      key={item.name}
-                      to={item.path}
-                      className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
-                    >
-                    {item.name}
-                    </Link>
-                  ))}
+                  ].map((item) =>  {
+                        const isActive = currentPath === item.path;
+                        return isActive ? (
+                          <span
+                            key={item.name}
+                            className="text-chocolate-gold font-semibold text-lg cursor-default transition-colors duration-300"
+                          >
+                          {item.name}
+                          </span>
+                          ) : (
+                          <Link
+                            key={item.name}
+                            to={item.path}
+                            className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
+                          >
+                          {item.name}
+                          </Link>
+                        );
+                  })}
                 </nav>
 
                 {/* Buttons */}
@@ -82,16 +95,33 @@ const Navbar = () => {
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
               <div className="md:hidden bg-white shadow-md p-4 space-y-2">
-                {["Home", "Products", "About Us", "Contact Us"].map((item) => (
-                  <Link
-                    key={item}
-                    to={`/${item.toLowerCase().replace(" ", "-")}`}
-                    className="block text-chocolate-dark text-lg font-medium transition hover:text-chocolate-gold"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ))}
+                {[
+                    { name: "Home", path: "/" },
+                    { name: "Products", path: "/products" },
+                    { name: "About Us", path: "/about" },
+                    { name: "Contact Us", path: "/contact" },
+                  ].map((item) => {
+                      const isActive = currentPath === item.path;
+                      return isActive ? (
+                        <span
+                          key={item.name}
+                          className="block text-chocolate-gold text-lg font-semibold cursor-default"
+                        >
+                        {item.name}
+                        </span>
+                        ) : (
+                        <Link
+                          key={item.name}
+                          to={item.path}
+                          className="block text-chocolate-dark text-lg font-medium transition hover:text-chocolate-gold"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                        {item.name}
+                        </Link>
+                      );
+                    }
+                  )
+                }
                 <Link
                   className="block w-full text-center rounded-md bg-[#4A2C1A] px-5 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-opacity-90"
                   to="/login"
