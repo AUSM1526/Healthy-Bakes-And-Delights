@@ -3,6 +3,8 @@ import Cart from "./Cart";
 import Logout from "./Logout";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import DefaultIcon from "../assets/DefaultIcon.jpg";
+import { useSelector } from "react-redux";
 
 const Navbar_Login = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -10,6 +12,8 @@ const Navbar_Login = () => {
     const menuRef = useRef(null);
     const location = useLocation();
     const currentPath = location.pathname;
+    const user = useSelector((state) => state.auth.user);
+    const avatar = user?.avatar || null;
 
     //Close menu when clicking outside
     useEffect(() => {
@@ -76,7 +80,7 @@ const Navbar_Login = () => {
                             >
                                 <span className="sr-only">Toggle user menu</span>
                                 <img
-                                    src="https://res.cloudinary.com/dyc2wudtr/image/upload/v1743596377/ucgp1exuhcwl4vyqu8yk.jpg"
+                                    src={avatar || `${DefaultIcon}`}
                                     alt="User Profile"
                                     className="size-11 object-cover"
                                 />

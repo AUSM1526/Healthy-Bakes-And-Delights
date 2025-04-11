@@ -13,7 +13,7 @@ const Product = () => {
             <Navbar />
             <br />
             <br />
-            <div className="bg-[#FAF3E0] min-h-screen py-12 px-6 md:px-16">
+            <div className="bg-[#F9F4EF] min-h-screen py-12 px-6 md:px-16">
                 {/* Page Heading */}
                 <div className="text-center max-w-3xl mx-auto">
                     <h1 className="text-5xl font-bold text-[#4A2E19] font-serif leading-tight">
