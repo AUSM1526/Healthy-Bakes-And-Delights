@@ -64,7 +64,7 @@ const registerUser = asyncHandler(async (req, res) => {
    const accountType = "user"; // for now only users can register
 
     // validate user data - not empty
-    if(!username || !email || !lastName || !firstName || !phoneNumber || !password || !otp){
+    if(!username || !email || !firstName || !phoneNumber || !password || !otp){
         throw new ApiError(400, "All fields are required");
     }
 
@@ -282,8 +282,8 @@ const changePassword = asyncHandler(async (req, res) => {
 const updateName = asyncHandler(async (req, res) => {
     const {firstName, lastName} = req.body;
 
-    if(!firstName || !lastName){
-        throw new ApiError(400, "First Name and Last Name are required");
+    if(!firstName){
+        throw new ApiError(400, "First Name is required");
     }
 
     const user = await User.findByIdAndUpdate(
