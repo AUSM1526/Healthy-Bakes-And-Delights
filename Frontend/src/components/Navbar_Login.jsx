@@ -106,7 +106,7 @@ const Navbar_Login = () => {
                     {/* Mobile Menu Button */}
                     <div className="md:hidden">
                         <button
-                            className="rounded-md p-2 text-white group-hover:text-chocolate-dark transition-colors duration-300"
+                            className="rounded-md p-2 text-chocolate-dark group-hover:text-chocolate-dark transition-colors duration-300"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         >
                             <svg

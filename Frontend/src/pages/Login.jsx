@@ -122,6 +122,16 @@ const Login = () => {
                 </a>
               </p>
             </div>
+            <div className="mt-3 text-center">
+              <p className="text-gray-700">
+                <a
+                  href="/"
+                  className="text-[#4A2C1A] hover:text-[#3A2314] transition-colors font-medium underline"
+                >
+                  Back To Home
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       );
