@@ -1,11 +1,18 @@
 import React from 'react';
 import Products from '../components/Product/Products';
 import Navbar from "../components/Navbar";
+import { useEffect } from "react";
 
 const Product = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      },[])
     
     return (
         <>
+            <Navbar />
+            <br />
+            <br />
             <div className="bg-[#FAF3E0] min-h-screen py-12 px-6 md:px-16">
                 {/* Page Heading */}
                 <div className="text-center max-w-3xl mx-auto">
@@ -24,7 +31,6 @@ const Product = () => {
                 </div>
             </div>
         </>
-        
     );
 }
 

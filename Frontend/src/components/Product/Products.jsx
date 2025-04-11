@@ -5,13 +5,16 @@ import toast from "react-hot-toast";
 import Deadpool from "../../assets/Deadpool.jpg";
 import { useEffect } from 'react';
 import ProductCard from './ProductCard';
+import Spinner from '../Spinner';
 
 const Products = () => {
     const [products,setProducts]  = useState([]);
     const [selectedType,setSelectedType] = useState("All Products");
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const allProducts = async() => {
+            setLoading(true);
             try {
                 const response = await apiFunc().get("/product/get-products-with-subcategory");
                 
@@ -36,6 +39,8 @@ const Products = () => {
                 setProducts(displayProducts);
             } catch (error) {
                 console.log("Error while fetching all Products: ",error);
+            } finally{
+              setLoading(false);
             }
         }
 
@@ -49,40 +54,49 @@ const Products = () => {
 
     return (
         <div>
-          {/* Category Dropdown */}
-          <div className="flex justify-end mb-6">
-            <select
-              value={selectedType === "All Products" ? "" : selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="border border-[#4A2E19] px-6 py-3 rounded-md shadow-md text-[#4A2E19] font-serif bg-white text-lg"
-            >
-              <option value="" disabled>Select Category</option> {/* Placeholder option */} 
-              {productTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-          </div>
+          {!loading && (
+            <>
+              {/* Category Dropdown */}
+                <div className="flex justify-end mb-6">
+                  <select
+                    value={selectedType === "All Products" ? "" : selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                    className="border border-[#4A2E19] px-6 py-3 rounded-md shadow-md text-[#4A2E19] font-serif bg-white text-lg"
+                  >
+                    <option value="" disabled>Select Category</option> {/* Placeholder option */} 
+                    {productTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.productName}
-              name={product.productName}
-              productType={product.productType === "Chocolate" ? "Chocolate" : ""}
-              imageSrc={product.productsubCategories[0]?.images[0]} 
-              variants={product.productsubCategories.map((sub) => ({
-                type: sub.name,
-                price: sub.price,
-                images: sub.images,
-                description: sub.description,
-                productId: sub.productId,
-                stock: sub.stock,
-              }))}
-            />
-          ))}
-        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.productName}
+                    name={product.productName}
+                    productType={product.productType === "Chocolate" ? "Chocolate" : ""}
+                    imageSrc={product.productsubCategories[0]?.images[0]} 
+                    variants={product.productsubCategories.map((sub) => ({
+                      type: sub.name,
+                      price: sub.price,
+                      images: sub.images,
+                      description: sub.description,
+                      productId: sub.productId,
+                      stock: sub.stock,
+                    }))}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+          {loading && (
+            <div className="flex justify-center items-center h-screen">
+              <Spinner />
+            </div>
+          )}
         </div>
         
       );
