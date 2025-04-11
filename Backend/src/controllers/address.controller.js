@@ -47,7 +47,7 @@ const addAddress = asyncHandler(async (req, res) => {
     await user.save({validateBeforeSave: false});
     
     return res.status(201).json(
-        new ApiResponse(200, {address}, "Address added successfully")
+        new ApiResponse(200, {user}, "Address added successfully")
     )
     
 });
