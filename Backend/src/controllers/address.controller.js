@@ -55,7 +55,7 @@ const addAddress = asyncHandler(async (req, res) => {
 // Update Address Function
 const updateAddress = asyncHandler(async (req, res) => {
     const {addressId} = req.params;
-
+    
     if (!mongoose.Types.ObjectId.isValid(addressId)) {
         throw new ApiError(400, "Invalid address ID format");
     }
@@ -99,8 +99,10 @@ const updateAddress = asyncHandler(async (req, res) => {
         }
     );
 
+    const user = await User.findById(req.user?._id).select("-password -refreshToken"); 
+
     return res.status(200).json(
-        new ApiResponse(200, { updatedAddress } , "Address updated successfully")
+        new ApiResponse(200, { user } , "Address updated successfully")
     )
 });
 
