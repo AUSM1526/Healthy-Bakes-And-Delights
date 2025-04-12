@@ -623,6 +623,29 @@ const viewCart = asyncHandler(async (req, res) => {
     )
 });
 
+// getAllAddresses Function
+const getAllAddresses = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user?._id).populate('addresses');
+    if(!user){
+        throw new ApiError(404, "User not found");
+    }
+
+    const addr = user.addresses.map((address) => ({
+        addrId : address._id,
+        houseNumber : address.houseNumber,
+        name : address.name,
+        area : address.area,
+        city : address.city,
+        state : address.state,
+        pincode : address.pincode,
+        isDefault : address.isDefault,
+    }));
+
+    return res.status(200).json(
+        new ApiResponse(200, {addr}, "Addresses fetched successfully")
+    );
+})
+
 export {
     registerUser,
     loginUser,
@@ -637,5 +660,6 @@ export {
     viewCart,
     getOrderHistory,
     getOrdersByStatus,
-    sendOtp
+    sendOtp,
+    getAllAddresses
 };
