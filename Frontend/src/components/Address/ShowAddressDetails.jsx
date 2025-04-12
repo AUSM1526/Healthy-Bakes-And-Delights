@@ -1,6 +1,6 @@
 import AddressCard from "./AddressCard";
 
-const ShowAddressDetails = ({addressDetails}) => {
+const ShowAddressDetails = ({addressDetails, OnSuccess}) => {
     return(
         <div>
             {addressDetails.length > 0 ? (
@@ -15,6 +15,7 @@ const ShowAddressDetails = ({addressDetails}) => {
                         state={addr.state}
                         pincode={addr.pincode}
                         isDefault={addr.isDefault}
+                        OnSuccess = {OnSuccess}
                     />
                     ))
             ):(
