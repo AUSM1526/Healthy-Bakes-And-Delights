@@ -7,7 +7,7 @@ const ShowAddressDetails = ({addressDetails}) => {
                     addressDetails.map((addr) => (
                     <AddressCard
                         key={addr._id}
-                        addrId={addr._id}
+                        addrId={addr.addrId}
                         houseNumber={addr.houseNumber}
                         name={addr.name}
                         area={addr.area}
