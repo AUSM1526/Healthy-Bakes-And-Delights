@@ -13,7 +13,7 @@ const addAddress = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required");
     }
 
-    const user = await User.findById(req.user?._id);
+    const user = await User.findById(req.user?._id).select("-password -refreshToken");
 
     if(!user){
         throw new ApiError(404, "User not found for adding address");
