@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
+import Profile from "./pages/Profile";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/login" element={<Login/>}/>
         <Route path="/products" element={<Product/>}/>
         <Route path="/productDetail" element={<ProductDetail/>}/>
+        <Route path="/profile" element={<Profile/>}/>
       </Routes>
     </Router>
   );
