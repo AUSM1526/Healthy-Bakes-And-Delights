@@ -608,6 +608,7 @@ const viewCart = asyncHandler(async (req, res) => {
         const totalPrice = productPrice * quantity;
 
         return{
+            productId: product._id,
             name: product.name,
             productType: product.productType?.name || "No ProductType",
             subCategory: product.subCategory?.name || "No SubCategory",
