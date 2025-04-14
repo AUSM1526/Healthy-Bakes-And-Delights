@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Cart from "./Cart";
+import Cart from "./CartLogo";
 import Logout from "./Logout";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
