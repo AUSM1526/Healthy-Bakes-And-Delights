@@ -73,8 +73,13 @@ const ProductDetail = () => {
                   +
                 </button>
               </div>
+
               <button className="flex-1 sm:flex-none px-10 py-2 bg-[#4A2E19] hover:bg-[#3a2115] text-white rounded-md transition-all">
                 Add to Cart
+              </button>
+
+              <button className="flex-1 sm:flex-none px-11 py-2 bg-[#4A2E19] hover:bg-[#3a2115] text-white rounded-md transition-all">
+                Buy Now
               </button>
             </div>
 

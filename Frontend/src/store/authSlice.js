@@ -3,7 +3,9 @@ import {createSlice} from '@reduxjs/toolkit';
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        user: null,
+        user: {
+            cart: null
+        }
     },
     reducers: {
         login: (state,action) => {
@@ -11,7 +13,10 @@ const authSlice = createSlice({
         },
         logout: (state) => {
             state.user = null;
-        }
+        },
+        addToCart: (state,action) => {
+            state.cart = action.payload;
+        },
     }
 });
 
