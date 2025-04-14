@@ -5,6 +5,8 @@ import { apiFunc } from "../utils/apiClient";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/authSlice";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetail = () => {
   const { state } = useLocation();
@@ -18,12 +20,20 @@ const ProductDetail = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const handleAddtoCart = async() => {
+    if(!user){
+      toast.error("Please login to continue");
+      navigate("/login");
+      return;
+    }
+
     try {
       const res = await apiFunc().post(`/user/add-to-cart?productId=${currentVariant.productId}&productQuantity=${quantity}`);
       const updatedCart = res.data.data.cart;

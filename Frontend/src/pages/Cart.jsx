@@ -1,5 +1,4 @@
 import React from 'react';
-import { Trash2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import { apiFunc } from '../utils/apiClient';
 import { useState, useEffect } from 'react';
