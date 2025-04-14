@@ -482,7 +482,7 @@ const addToCart = asyncHandler(async (req, res) => {
             },
             {
                 $inc:{
-                    "cart.$.quantity": 1
+                    "cart.$.quantity": productQuantity || 1
                 }
             }
         );
