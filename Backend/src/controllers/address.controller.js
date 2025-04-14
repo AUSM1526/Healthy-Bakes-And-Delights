@@ -167,8 +167,10 @@ const deleteAddress = asyncHandler(async (req, res) => {
         }
     }
 
+    const updatedUser = await User.findById(req.user._id).select("-password -refreshToken")
+
     return res.status(200).json(
-        new ApiResponse(200, {} , "Address deleted successfully")
+        new ApiResponse(200, {updatedUser} , "Address deleted successfully")
     )
 
 });
