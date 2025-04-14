@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -55,8 +56,12 @@ const App = () => {
         <Route path="/login" element={<Login/>}/>
         <Route path="/products" element={<Product/>}/>
         <Route path="/productDetail" element={<ProductDetail/>}/>
-        <Route path="/profile" element={<Profile/>}/>
-        <Route path="/cart" element={<CartPage/>}/>
+        
+        <Route element={<PrivateRoute/>}>
+          <Route path="/profile" element={<Profile/>}/>
+          <Route path="/cart" element={<CartPage/>}/>
+        </Route>
+        
       </Routes>
     </Router>
   );
