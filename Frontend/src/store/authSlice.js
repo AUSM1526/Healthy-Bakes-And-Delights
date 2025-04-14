@@ -15,7 +15,7 @@ const authSlice = createSlice({
             state.user = null;
         },
         addToCart: (state,action) => {
-            state.cart = action.payload;
+            state.user.cart = action.payload;
         },
     }
 });
