@@ -459,7 +459,7 @@ const getOrdersByStatus = asyncHandler(async (req, res, next) => {
 
 // Add to Cart
 const addToCart = asyncHandler(async (req, res) => {
-    const {productId} = req.query;
+    const {productId, productQuantity} = req.query;
     if(!mongoose.isValidObjectId(productId)){
         throw new ApiError(400, "Invalid Product Id");
     }
@@ -493,7 +493,7 @@ const addToCart = asyncHandler(async (req, res) => {
                 $push:{
                     cart:{
                         productId,
-                        quantity: 1
+                        quantity: productQuantity || 1
                     }
                 }
             },
