@@ -42,6 +42,38 @@ const AddressCard = ({addrId,houseNumber,name,area,city,state,pincode,isDefault,
     }
   };
 
+  const handleDelete = async() => {
+    try {
+      const res = await apiFunc().delete(`/address/${addrId}`);
+      dispatch(login(res.data.data.user));
+      if(OnSuccess) OnSuccess();
+      toast.success("Address deleted successfully");
+    } catch (error) {
+      console.log("Error deleting address:", error);
+      toast.error(error.response.data.message || "Error deleting address");
+    }
+  }
+
+  const handleDefault = async() => {
+    try {
+      const res = await apiFunc().patch(`/address/${addrId}`,{
+        houseNumber,
+        name,
+        area,
+        city,
+        state,
+        pincode,
+        isDefault: true
+      });
+      dispatch(login(res.data.data.user));
+      if(OnSuccess) OnSuccess();
+      toast.success("Default address set successfully");
+    } catch (error) {
+      console.log("Error setting default address:", error);
+      toast.error("Error setting default address");
+    }
+  }
+
   return (
     <div className="bg-[#fcf8f3] rounded-lg border px-6 py-4 text-[#4b2e1e] shadow-sm mb-4">
       <div className="flex justify-between items-start">
@@ -81,7 +113,7 @@ const AddressCard = ({addrId,houseNumber,name,area,city,state,pincode,isDefault,
             <>
 
               {!isDefault && (
-                <button type="button" title="Set as Default" className="hover:text-chocolate-buttonHover transition-colors">
+                <button type="button" title="Set as Default" className="hover:text-chocolate-buttonHover transition-colors" onClick={handleDefault}>
                   <MapPin className="w-4 h-4" />
                 </button>
               )}
@@ -90,7 +122,7 @@ const AddressCard = ({addrId,houseNumber,name,area,city,state,pincode,isDefault,
                 <Pencil className="w-4 h-4" />
               </button>
 
-              <button type="button" title="Delete" className="hover:text-chocolate-buttonHover transition-colors">
+              <button type="button" title="Delete" className="hover:text-chocolate-buttonHover transition-colors" onClick={handleDelete}>
                 <Trash2 className="w-4 h-4" />
               </button>
 
