@@ -3,12 +3,15 @@ import Navbar_Login from "./Navbar_Login";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const Navbar = () => {
     const user = useSelector((state) => state.auth.user);
     const isLoggedIn = Boolean(user);
     const location = useLocation();
     const currentPath = location.pathname;
+
+    const navigate = useNavigate();
     
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -19,9 +22,10 @@ const Navbar = () => {
             <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
                 {/* Brand Name */}
-                <div className="text-2xl font-playfair font-bold text-chocolate-dark transition-colors duration-300 tracking-wide">
+                <button 
+                className="text-2xl font-playfair font-bold text-chocolate-dark transition-colors duration-300 tracking-wide" onClick={() => navigate("/")} >
                   Healthy Bakes & Delights
-                </div>
+                </button>
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex md:gap-8">

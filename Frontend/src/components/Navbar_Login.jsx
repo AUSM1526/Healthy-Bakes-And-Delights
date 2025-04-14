@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import DefaultIcon from "../assets/DefaultIcon.jpg";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Navbar_Login = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -14,6 +15,8 @@ const Navbar_Login = () => {
     const currentPath = location.pathname;
     const user = useSelector((state) => state.auth.user);
     const avatar = user?.avatar || null;
+
+    const navigate = useNavigate();
 
     //Close menu when clicking outside
     useEffect(() => {
@@ -32,9 +35,10 @@ const Navbar_Login = () => {
                 <div className="flex h-16 items-center justify-between">
 
                     {/* Brand Name */}
-                    <div className="text-2xl font-playfair font-bold text-chocolate-dark transition-colors duration-300 tracking-wide">
+                    <button 
+                        className="text-2xl font-playfair font-bold text-chocolate-dark transition-colors duration-300 tracking-wide" onClick={() => navigate("/")} >
                         Healthy Bakes & Delights
-                    </div>
+                    </button>
 
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex md:gap-8">
