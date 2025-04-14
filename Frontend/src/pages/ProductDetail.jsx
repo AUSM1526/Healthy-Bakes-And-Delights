@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { apiFunc } from "../utils/apiClient";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/authSlice";
+import toast from "react-hot-toast";
 
 const ProductDetail = () => {
   const { state } = useLocation();
@@ -13,9 +17,24 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleAddtoCart = async() => {
+    try {
+      const res = await apiFunc().post(`/user/add-to-cart?productId=${currentVariant.productId}&productQuantity=${quantity}`);
+      const updatedCart = res.data.data.cart;
+      console.log("Updated Cart: ", updatedCart); 
+      dispatch(addToCart(updatedCart));
+      toast.success("Added to Cart Successfully");
+    } catch (error) {
+      console.log("Error while adding to cart: ", error);
+      toast.error(error.response.data.message || "Error while adding to cart");
+    }
+  }
 
   return (
     <>
@@ -74,7 +93,7 @@ const ProductDetail = () => {
                 </button>
               </div>
 
-              <button className="flex-1 sm:flex-none px-10 py-2 bg-[#4A2E19] hover:bg-[#3a2115] text-white rounded-md transition-all">
+              <button className="flex-1 sm:flex-none px-10 py-2 bg-[#4A2E19] hover:bg-[#3a2115] text-white rounded-md transition-all" onClick={handleAddtoCart}>
                 Add to Cart
               </button>
 
