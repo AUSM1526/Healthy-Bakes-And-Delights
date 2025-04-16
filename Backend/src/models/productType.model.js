@@ -10,7 +10,10 @@ const productTypeSchema = new Schema(
         hasSubCategories:{
             type: Boolean,
             default:false
-        }
+        },
+        image: {
+            type: String,
+        },
     },
     {
         timestamps: true
