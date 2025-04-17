@@ -14,6 +14,7 @@ import {userPendingApproval} from "../mailTemplates/userApproval.js";
 import {userOrderApproved} from "../mailTemplates/userConfirmation.js";
 import {userOrderNotApproved} from "../mailTemplates/userNotApproved.js";
 import {orderCancelled} from "../mailTemplates/orderCancelled.js";
+import {ProductType} from "../models/productType.model.js";
 
 // Place an individual Product order
 const placeSingleOrder = asyncHandler(async (req, res, next) => {
@@ -58,13 +59,18 @@ const placeSingleOrder = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, "No default address found. Please select or set a default address.");
     }
 
+    const  productType = await ProductType.findById(product.productType);
+    
     const createdOrder = await Order.create({
         user: userId,
         products: [
             {
                 product: productId,
                 quantity,
-                price
+                price,
+                image: product.images[0],
+                productName: product.name,
+                productType: productType.name
             }
         ],
         status: "Pending",

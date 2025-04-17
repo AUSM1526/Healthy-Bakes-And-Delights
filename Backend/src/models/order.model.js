@@ -21,6 +21,15 @@ const orderSchema = new Schema(
                 price:{
                     type: Number,
                     required: true
+                },
+                image:{
+                    type: String,
+                },
+                productName:{
+                    type: String,
+                },
+                productType:{
+                    type: String,
                 }
             }
         ],
