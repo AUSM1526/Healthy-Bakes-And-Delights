@@ -334,7 +334,7 @@ const cancelOrder = asyncHandler(async (req, res, next) =>{
 });
 
 // Confirm Payment Screenshot
-const confirmPaymentScreenshot = asyncHandler(async (req, res, next) => {
+const confirmOrder = asyncHandler(async (req, res, next) => {
     const {orderId} = req.query;
     if(!mongoose.Types.ObjectId.isValid(orderId)){
         throw new ApiError(400, "Invalid orderId");
@@ -343,6 +343,10 @@ const confirmPaymentScreenshot = asyncHandler(async (req, res, next) => {
     const order = await Order.findById(orderId);
     if(!order){
         throw new ApiError(404, "Order not found");
+    }
+
+    if(order.screenshot === null){
+        throw new ApiError(404, "Please upload payment screenshot");
     }
 
     const user = await User.findById(req.user?._id);
@@ -360,7 +364,7 @@ const confirmPaymentScreenshot = asyncHandler(async (req, res, next) => {
     await mailSender(userEmail,"Order Awaiting Approval",userbody);
 
     return res.status(200).json(
-        new ApiResponse(200, {order}, "Screenshot uploaded successfully")
+        new ApiResponse(200, {order}, "Order Confirmed successfully, waiting for admin approval")
     );
 });
 
@@ -497,7 +501,7 @@ export {
     getAllOrders,
     updateOrderStatus,
     cancelOrder,
-    confirmPaymentScreenshot,
+    confirmOrder,
     updatePaymentScreenshot,
     approveOrder,
     notApproveOrder
