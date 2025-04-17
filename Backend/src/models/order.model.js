@@ -28,6 +28,9 @@ const orderSchema = new Schema(
                 productName:{
                     type: String,
                 },
+                subCategory:{
+                    type: String,
+                },
                 productType:{
                     type: String,
                 }

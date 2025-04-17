@@ -15,6 +15,7 @@ import {userOrderApproved} from "../mailTemplates/userConfirmation.js";
 import {userOrderNotApproved} from "../mailTemplates/userNotApproved.js";
 import {orderCancelled} from "../mailTemplates/orderCancelled.js";
 import {ProductType} from "../models/productType.model.js";
+import {SubCategory} from "../models/subCategory.model.js";
 
 // Place an individual Product order
 const placeSingleOrder = asyncHandler(async (req, res, next) => {
@@ -60,7 +61,8 @@ const placeSingleOrder = asyncHandler(async (req, res, next) => {
     }
 
     const  productType = await ProductType.findById(product.productType);
-    
+    const subCategory = await SubCategory.findById(product.subCategory);
+
     const createdOrder = await Order.create({
         user: userId,
         products: [
@@ -70,6 +72,7 @@ const placeSingleOrder = asyncHandler(async (req, res, next) => {
                 price,
                 image: product.images[0],
                 productName: product.name,
+                subCategory: subCategory ? subCategory.name : "",
                 productType: productType.name
             }
         ],
@@ -330,8 +333,8 @@ const cancelOrder = asyncHandler(async (req, res, next) =>{
     );
 });
 
-// Upload Payment ScreenShot
-const uploadPaymentScreenshot = asyncHandler(async (req, res, next) => {
+// Confirm Payment Screenshot
+const confirmPaymentScreenshot = asyncHandler(async (req, res, next) => {
     const {orderId} = req.query;
     if(!mongoose.Types.ObjectId.isValid(orderId)){
         throw new ApiError(400, "Invalid orderId");
@@ -342,24 +345,10 @@ const uploadPaymentScreenshot = asyncHandler(async (req, res, next) => {
         throw new ApiError(404, "Order not found");
     }
 
-    const screenshotLocalPath = req.file?.path;
-    if(!screenshotLocalPath){
-        throw new ApiError(400, "Please upload a screenshot");
-    }
-
-    const screenshotUrl = await uploadOnCloudinary(screenshotLocalPath);
-    if(!screenshotUrl){
-        throw new ApiError(500, "Failed to upload screenshot");
-    }
-
-    order.screenshot = screenshotUrl.url;
-    await order.save({validateBeforeSave: false});
-    
     const user = await User.findById(req.user?._id);
     if(!user){
         throw new ApiError(404, "User not found");
     }
-
     // send mail to admin on order creation and user to wait for approval;
     const userEmail = user.email;
     const firstName = user.firstName;
@@ -508,7 +497,7 @@ export {
     getAllOrders,
     updateOrderStatus,
     cancelOrder,
-    uploadPaymentScreenshot,
+    confirmPaymentScreenshot,
     updatePaymentScreenshot,
     approveOrder,
     notApproveOrder
