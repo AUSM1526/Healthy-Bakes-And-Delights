@@ -14,12 +14,15 @@ export const apiFunc = () => {
         async(error) => {
             console.log("Error in request: ", error);
             if(error.response?.status === 401){
+                const currentPath = window.location.pathname;
                 console.log("Unauthorized, Please login again!");
                 toast.error("Session expired. Please log in again.");
                 store.dispatch(logout());
-                setTimeout(() => {
-                    window.location.href = "/";
-                }, 1500);
+                if(currentPath !== "/"){
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    }, 1500);
+                }
             }
             else return Promise.reject(error);
         }
