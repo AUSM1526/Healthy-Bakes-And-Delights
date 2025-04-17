@@ -25,15 +25,15 @@ const Third = () => {
           <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
           <ul className="space-y-3 text-chocolate-dark">
             <li className="flex items-start gap-3 ">
-              <HiOutlineLocationMarker className="text-amber-950 text-xl mt-1" />
+              <HiOutlineLocationMarker className="text-chocolate-dark text-xl mt-1" />
               <span>Ahmedabad, Gujarat</span>
             </li>
             <li className="flex items-center gap-3">
-              <HiOutlinePhone className="text-amber-950 text-xl" />
+              <HiOutlinePhone className="text-chocolate-dark text-xl" />
               <span>+91 1234567890</span>
             </li>
             <li className="flex items-center gap-3">
-              <HiOutlineMail className="text-amber-950 text-xl" />
+              <HiOutlineMail className="text-chocolate-dark text-xl" />
               <span>healthybakes@gmail.com</span>
             </li>
           </ul>
