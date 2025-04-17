@@ -6,12 +6,14 @@ import Deadpool from "../../assets/Deadpool.jpg";
 import { useEffect } from 'react';
 import ProductCard from './ProductCard';
 import Spinner from '../Spinner';
+import { useLocation } from 'react-router-dom';
 
 const Products = () => {
+    const location = useLocation();
     const [products,setProducts]  = useState([]);
-    const [selectedType,setSelectedType] = useState("All Products");
-    const [loading, setLoading] = useState(false);
-
+    const [selectedType,setSelectedType] = useState(location.state?.selectedType ||"All Products");
+    const [loading, setLoading] = useState(false); 
+    
     useEffect(() => {
         const allProducts = async() => {
             setLoading(true);
@@ -63,7 +65,7 @@ const Products = () => {
                     onChange={(e) => setSelectedType(e.target.value)}
                     className="border border-[#4A2E19] px-6 py-3 rounded-md shadow-md text-[#4A2E19] font-serif bg-white text-lg"
                   >
-                    <option value="" disabled>Select Category</option> {/* Placeholder option */} 
+                    <option value="" disabled>Select Category</option> Placeholder option 
                     {productTypes.map((type) => (
                       <option key={type} value={type}>
                         {type}
