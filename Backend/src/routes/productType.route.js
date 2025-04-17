@@ -7,7 +7,7 @@ import {upload} from "../middlewares/multer.middleware.js";
 const productTypeRouter = Router();
 
 productTypeRouter.route("/add-product-type").post(verifyJWT,isAdmin,upload.single("image"),addProductType);
-productTypeRouter.route("/get-all-productTypes").get(verifyJWT,getAllProductTypes);
+productTypeRouter.route("/get-all-productTypes").get(getAllProductTypes);
 productTypeRouter.route("/update-ProductType").patch(verifyJWT,isAdmin,updateProductType);
 productTypeRouter.route("/delete-productType").delete(verifyJWT,isAdmin,deleteProductType);
 productTypeRouter.route("/update-productType-image").patch(verifyJWT,isAdmin,upload.single("image"),updateImage);
