@@ -6,8 +6,6 @@ import {User} from "../models/user.model.js";
 import {Product} from "../models/product.model.js";
 import {Order} from "../models/order.model.js";
 import generateUPIQRCode from "../utils/generateQrCode.js";
-import {uploadOnCloudinary} from "../utils/cloudinary.js";
-import {deleteFromCloudinary} from "../utils/cloudinary.js";
 import { mailSender } from "../utils/mailSender.js";
 import {adminOrderNotification} from "../mailTemplates/adminNotification.js";
 import {userPendingApproval} from "../mailTemplates/userApproval.js";
@@ -20,7 +18,11 @@ import {SubCategory} from "../models/subCategory.model.js";
 // Place an individual Product order
 const placeSingleOrder = asyncHandler(async (req, res, next) => {
     const userId = req.user?._id;
-    const {productId, quantity} = req.query;
+    const {productId, quantity, addressId,upiTransactionId} = req.query;
+
+    if(!upiTransactionId){
+        throw new ApiError(400, "Please provide UPI TransactionId / Reference No.");
+    }
 
     if(!mongoose.Types.ObjectId.isValid(productId)){
         throw new ApiError(400, "Invalid productId");
@@ -55,11 +57,7 @@ const placeSingleOrder = asyncHandler(async (req, res, next) => {
         throw new ApiError(400, "Please add an address to place an order");
     }
     
-    const defaultAddress = user.addresses.find(address => address.isDefault);
-    if (!defaultAddress) {
-        throw new ApiError(400, "No default address found. Please select or set a default address.");
-    }
-
+    
     const  productType = await ProductType.findById(product.productType);
     const subCategory = await SubCategory.findById(product.subCategory);
 
@@ -78,10 +76,9 @@ const placeSingleOrder = asyncHandler(async (req, res, next) => {
         ],
         status: "Pending",
         totalPrice: total,
-        address: defaultAddress._id
+        address: addressId,
+        transactionId: upiTransactionId
     });
-
-    const qrCode = await generateUPIQRCode(total, createdOrder._id);
 
     await Product.updateOne(
         {
@@ -92,8 +89,18 @@ const placeSingleOrder = asyncHandler(async (req, res, next) => {
         }
     );
 
+    // send mail to admin on order creation and user to wait for approval;
+    const userEmail = user.email;
+    const firstName = user.firstName;
+    const lastName = user.lastName ? user.lastName : "";
+    const adminbody = adminOrderNotification(user.username,firstName,lastName,userEmail,createdOrder.totalPrice);
+    const userbody = userPendingApproval(firstName,lastName,createdOrder.totalPrice,process.env.MAIL_USER);
+
+    await mailSender(process.env.MAIL_USER,"Order waiting for approval",adminbody);
+    await mailSender(userEmail,"Order Awaiting Approval",userbody);
+
     return res.status(201).json(
-        new ApiResponse(201, {createdOrder, qrCode}, "Single Order placed successfully")
+        new ApiResponse(201, {createdOrder}, "Single Order placed successfully")
     );
 });
 
@@ -162,8 +169,6 @@ const placeCartOrder = asyncHandler(async (req, res, next) => {
         address: defaultAddress._id
     });
 
-    const qrCode = await generateUPIQRCode(total, createdOrder._id);
-
     const bulkOps = user.cart.map(item => ({
         updateOne:{
             filter: {_id: item.productId._id},
@@ -179,7 +184,7 @@ const placeCartOrder = asyncHandler(async (req, res, next) => {
     await user.save({validateBeforeSave: false});
 
     return res.status(201).json(
-        new ApiResponse(201, {createdOrder, qrCode}, "Cart Order placed successfully")
+        new ApiResponse(201, {createdOrder}, "Cart Order placed successfully")
     );
 
 });
@@ -333,85 +338,6 @@ const cancelOrder = asyncHandler(async (req, res, next) =>{
     );
 });
 
-// Confirm Payment Screenshot
-const confirmOrder = asyncHandler(async (req, res, next) => {
-    const {orderId} = req.query;
-    if(!mongoose.Types.ObjectId.isValid(orderId)){
-        throw new ApiError(400, "Invalid orderId");
-    }
-
-    const order = await Order.findById(orderId);
-    if(!order){
-        throw new ApiError(404, "Order not found");
-    }
-
-    if(order.screenshot === null){
-        throw new ApiError(404, "Please upload payment screenshot");
-    }
-
-    const user = await User.findById(req.user?._id);
-    if(!user){
-        throw new ApiError(404, "User not found");
-    }
-    // send mail to admin on order creation and user to wait for approval;
-    const userEmail = user.email;
-    const firstName = user.firstName;
-    const lastName = user.lastName ? user.lastName : "";
-    const adminbody = adminOrderNotification(user.username,firstName,lastName,userEmail,order.totalPrice);
-    const userbody = userPendingApproval(firstName,lastName,order.totalPrice,process.env.MAIL_USER);
-
-    await mailSender(process.env.MAIL_USER,"Order waiting for approval",adminbody);
-    await mailSender(userEmail,"Order Awaiting Approval",userbody);
-
-    return res.status(200).json(
-        new ApiResponse(200, {order}, "Order Confirmed successfully, waiting for admin approval")
-    );
-});
-
-// Update Payment ScreenShot
-const updatePaymentScreenshot = asyncHandler(async (req, res, next) => {
-    const screenshotLocalPath = req.file?.path;
-    if(!screenshotLocalPath){
-        throw new ApiError(400, "Please upload a screenshot");
-    }
-
-    const screenshotUrl = await uploadOnCloudinary(screenshotLocalPath);
-    if(!screenshotUrl){
-        throw new ApiError(500, "Failed to upload screenshot");
-    }
-
-    const {orderId} = req.query;
-    if(!mongoose.Types.ObjectId.isValid(orderId)){
-        throw new ApiError(400, "Invalid orderId");
-    }
-
-    const order = await Order.findById(orderId);
-    if(!order){
-        throw new ApiError(404, "Order not found");
-    }
-
-    const match = order.screenshot ? order.screenshot.match(/\/([^\/]+)\.\w+$/) : null;
-    const oldScreenshotPublicId = match ? match[1] : null;
-
-    order.screenshot = screenshotUrl.url;
-    await order.save({validateBeforeSave: false});
-
-    if(oldScreenshotPublicId){
-        try {
-            console.log("oldAvatarPublicId: ",oldScreenshotPublicId);
-            await deleteFromCloudinary(oldScreenshotPublicId);
-        } catch (error) {
-            console.error("Failed to delete old avatar from Cloudinary:", error);
-        }
-    }
-
-
-    return res.status(200).json(
-        new ApiResponse(200, {order}, "Screenshot updated successfully")
-    )
-
-});
-
 // Order Approval 
 const approveOrder = asyncHandler(async (req, res, next) => {
     const {orderId} = req.query;
@@ -495,14 +421,23 @@ const notApproveOrder = asyncHandler(async (req, res, next) => {
     );
 });
 
+const orderQrCode = asyncHandler(async (req, res, next) => {
+    const {total} = req.query;
+    const qrCode = await generateUPIQRCode(total);
+    
+    return res.status(200).json(
+        new ApiResponse(200, {qrCode}, "QR Code generated successfully")
+    );
+    
+});
+
 export {
     placeSingleOrder,
     placeCartOrder,
     getAllOrders,
     updateOrderStatus,
     cancelOrder,
-    confirmOrder,
-    updatePaymentScreenshot,
     approveOrder,
-    notApproveOrder
+    notApproveOrder,
+    orderQrCode
 };
