@@ -60,7 +60,7 @@ const orderSchema = new Schema(
             ref: "Address",
             required: true
         },
-        screenshot:{
+        transactionId:{
             type: String,
             default: null
         },
