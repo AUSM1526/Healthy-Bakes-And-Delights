@@ -8,6 +8,9 @@ import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
 import Profile from "./pages/Profile";
 import CartPage from "./pages/Cart";
+import SingleOrderPage from "./pages/SingleOrder";
+import CartOrderPage from "./pages/CartOrder";
+import OrderSuccess from "./pages/OrderSuccess";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -60,6 +63,9 @@ const App = () => {
         <Route element={<PrivateRoute/>}>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/cart" element={<CartPage/>}/>
+          <Route path="/order" element={<SingleOrderPage/>}/>
+          <Route path="/cartOrder" element={<CartOrderPage/>}/>
+          <Route path="/orderSuccess" element={<OrderSuccess/>}/>
         </Route>
         
       </Routes>
