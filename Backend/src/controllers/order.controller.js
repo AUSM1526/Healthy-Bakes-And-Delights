@@ -107,21 +107,34 @@ const placeSingleOrder = asyncHandler(async (req, res, next) => {
 // Place Cart Order
 const placeCartOrder = asyncHandler(async (req, res, next) => {
     const userId = req.user?._id;
-    
+    const {addressId,upiTransactionId} = req.query;
+
+    if(!upiTransactionId){
+        throw new ApiError(400, "Please provide UPI TransactionId / Reference No.");
+    }
+
     const user = await User.findById(userId).populate([
         {
             path: 'cart.productId',
             model: 'Product',
-            populate:{
-                path: 'subCategory',
-                model: 'SubCategory',
-                select: 'basePrice'
-            }
+            populate:[
+                {
+                    path: 'subCategory',
+                    model: 'SubCategory',
+                    select: 'name basePrice'
+                },
+                {
+                    path: 'productType',
+                    model: 'ProductType',
+                    select: 'name'
+                }
+            ]
         },
         {
             path: 'addresses',
             model: 'Address'
-        }
+        },
+        
     ]);   
     if(!user){
         throw new ApiError(404, "User not found");
@@ -146,7 +159,11 @@ const placeCartOrder = asyncHandler(async (req, res, next) => {
         return {
             product: product._id,
             quantity: item.quantity,
-            price
+            price,
+            image: product.images[0],
+            productName: product.name,
+            subCategory: product.subCategory?.name || "" ,
+            productType: product.productType.name
         }
     });
 
@@ -166,7 +183,8 @@ const placeCartOrder = asyncHandler(async (req, res, next) => {
         products: cartItems,
         status: "Pending",
         totalPrice: total,
-        address: defaultAddress._id
+        address: addressId,
+        transactionId: upiTransactionId
     });
 
     const bulkOps = user.cart.map(item => ({
@@ -182,6 +200,16 @@ const placeCartOrder = asyncHandler(async (req, res, next) => {
 
     user.cart = [];
     await user.save({validateBeforeSave: false});
+
+    // send mail to admin on order creation and user to wait for approval;
+    const userEmail = user.email;
+    const firstName = user.firstName;
+    const lastName = user.lastName ? user.lastName : "";
+    const adminbody = adminOrderNotification(user.username,firstName,lastName,userEmail,createdOrder.totalPrice);
+    const userbody = userPendingApproval(firstName,lastName,createdOrder.totalPrice,process.env.MAIL_USER);
+
+    await mailSender(process.env.MAIL_USER,"Order waiting for approval",adminbody);
+    await mailSender(userEmail,"Order Awaiting Approval",userbody);
 
     return res.status(201).json(
         new ApiResponse(201, {createdOrder}, "Cart Order placed successfully")
