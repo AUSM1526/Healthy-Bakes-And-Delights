@@ -46,6 +46,12 @@ const ProductDetail = () => {
     }
   }
 
+  const handleOrder = async() => {
+    const productId = currentVariant.productId;
+    const products = [{ productId, quantity, productName, productType, price: currentVariant.price, image: currentVariant.images[0], subCategory: currentVariant.type }];
+    navigate("/order",{state:{products}});
+  }
+
   return (
     <>
       <Navbar />
@@ -107,7 +113,7 @@ const ProductDetail = () => {
                 Add to Cart
               </button>
 
-              <button className="flex-1 sm:flex-none px-11 py-2 bg-[#4A2E19] hover:bg-[#3a2115] text-white rounded-md transition-all">
+              <button className="flex-1 sm:flex-none px-11 py-2 bg-[#4A2E19] hover:bg-[#3a2115] text-white rounded-md transition-all" onClick={handleOrder}>
                 Buy Now
               </button>
             </div>
