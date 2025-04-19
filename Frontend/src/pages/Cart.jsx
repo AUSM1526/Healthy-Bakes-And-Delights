@@ -49,7 +49,6 @@ const CartPage = () => {
         }
       }
 
-
     const handleRemoveFromCart = async(productId) => {
         try {
           const res = await apiFunc().delete(`/user/remove-from-cart?productId=${productId}`);
@@ -71,6 +70,11 @@ const CartPage = () => {
         return acc + (item.quantity);
     },0);
 
+    const handleCheckout = async() => {
+        navigate("/cartOrder",{state: { products: cart } });
+    }
+
+
   return (
     <>
         <Navbar/>
@@ -87,29 +91,35 @@ const CartPage = () => {
                         <h2 className="font-serif text-xl font-medium border-b p-4">Cart Items ({totalItems})</h2>
 
                         <div className="divide-y">
-                            {cart.map((item, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-4">
-                                <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 bg-[#f3e7da] rounded-md">
-                                    <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded-md" />
-                                </div>
-                                <div>
-                                    <h3 className="font-serif font-medium">{item.name}<span className="text-[#96705B] text-sm font-light ml-2">{item.productType === "Chocolate" && `${item.subCategory}  ${item.productType}`}</span></h3>
-                                </div>
-                                </div>
-
-                                <div className="flex items-center gap-4">
-                                <div className="flex items-center border rounded px-2 py-1">
-                                    <button className="px-1" onClick={() => handleRemoveFromCart(item.productId)}>-</button>
-                                    <span className="px-2">{item.quantity}</span>
-                                    <button className="px-1" onClick={() =>handleAddtoCart(item.productId)}>+</button>
-                                </div>
-                                <div className="w-24 text-right">
-                                    ₹{item.productPrice}.00
-                                </div>
-                                </div>
-                            </div>
-                            ))}
+                            {cart.length > 0 ? (
+                                <>
+                                    {cart.map((item, idx) => (
+                                    <div key={idx} className="flex items-center justify-between p-4">
+                                        <div className="flex items-center gap-4">
+                                        <div className="w-16 h-16 bg-[#f3e7da] rounded-md">
+                                            <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded-md" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-serif font-medium">{item.name}<span className="text-[#96705B] text-sm font-light ml-2">{item.productType === "Chocolate" && `${item.subCategory}  ${item.productType}`}</span></h3>
+                                        </div>
+                                        </div>
+        
+                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center border rounded px-2 py-1">
+                                            <button className="px-1" onClick={() => handleRemoveFromCart(item.productId)}>-</button>
+                                            <span className="px-2">{item.quantity}</span>
+                                            <button className="px-1" onClick={() =>handleAddtoCart(item.productId)}>+</button>
+                                        </div>
+                                        <div className="w-24 text-right">
+                                            ₹{item.productPrice}.00
+                                        </div>
+                                        </div>
+                                    </div>
+                                    ))}
+                                </>
+                            ):(
+                                <p className="text-gray-400 italic">Your Cart is Empty</p>
+                            )}
                         </div>
                         </div>
 
@@ -135,7 +145,7 @@ const CartPage = () => {
                             </div>
                         </div>
 
-                        <button className="w-full mt-6 bg-[#4b2e1e] hover:bg-[#5e3b24] text-white py-2 rounded-lg font-medium">
+                        <button className="w-full mt-6 bg-[#4b2e1e] hover:bg-[#5e3b24] text-white py-2 rounded-lg font-medium" onClick={handleCheckout}>
                             Proceed to Checkout
                         </button>
 
