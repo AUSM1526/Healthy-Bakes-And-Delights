@@ -56,7 +56,7 @@ const OrderSuccess = () => {
       <Navbar />
       <br />
       <br />
-      <div className="min-h-screen bg-[#fefaf6] px-4 py-10 text-[#3b2f2f]">
+      <div className="min-h-screen bg-[#F9F4EF] px-4 py-10 text-[#3b2f2f]">
         <div className="max-w-2xl mx-auto text-center">
           <CheckCircle className="w-12 h-12 mx-auto text-[#4b2e1e] mt-8" />
           <h1 className="text-[#4b2e1e] text-2xl font-semibold mt-4 font-serif">Order Placed Successfully!</h1>
