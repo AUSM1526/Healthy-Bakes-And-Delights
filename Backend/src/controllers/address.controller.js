@@ -175,8 +175,27 @@ const deleteAddress = asyncHandler(async (req, res) => {
 
 });
 
+// get Address Details Function
+const getAddressDetails = asyncHandler(async (req, res) => {
+    const {addressId} = req.query;
+
+    if(!mongoose.Types.ObjectId.isValid(addressId)){
+        throw new ApiError(400, "Invalid address ID format");
+    }
+
+    const address = await Address.findById(addressId);
+    if(!address){
+        throw new ApiError(404, "Address not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {address}, "Address details fetched successfully")
+    )
+})
+
 export {
     addAddress,
     updateAddress,
-    deleteAddress
+    deleteAddress,
+    getAddressDetails
 };
