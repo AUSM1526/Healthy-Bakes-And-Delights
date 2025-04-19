@@ -3,8 +3,14 @@ import Navbar from "../components/Navbar";
 import First from "../components/Home/First";
 import Second from "../components/Home/Second";
 import Third from "../components/Home/Third";
+import { useEffect } from "react";
 
 const Home = () => {
+    
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <>
             <Navbar/>
