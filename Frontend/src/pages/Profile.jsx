@@ -144,7 +144,6 @@ const Profile = () => {
         const orderDetails = res.data.data.orders;
         const recentOrders = orderDetails[0].orderHistory.slice(0,2);
         setOrders(recentOrders);
-        console.log("Orders: ", recentOrders);
     } catch (error) {
         console.log("Error fetching order details:", error);
         toast.error(error.response.data.message || "Failed to fetch order details. Please try again later.");
