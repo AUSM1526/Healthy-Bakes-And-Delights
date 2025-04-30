@@ -1,7 +1,7 @@
 import {Router} from "express";
 import {verifyJWT} from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.middleware.js";
-import {placeSingleOrder, placeCartOrder, getAllOrders, updateOrderStatus, cancelOrder, approveOrder, notApproveOrder,orderQrCode} from "../controllers/order.controller.js";
+import {placeSingleOrder, placeCartOrder, getAllOrders, updateOrderStatus, cancelOrder, approveOrder, notApproveOrder, orderQrCode, getOrderDetails} from "../controllers/order.controller.js";
 
 const orderRouter = Router();
 
@@ -13,5 +13,6 @@ orderRouter.route("/cancelOrder").patch(verifyJWT, cancelOrder);
 orderRouter.route("/approveOrder").patch(verifyJWT, isAdmin, approveOrder);
 orderRouter.route("/notApproveOrder").patch(verifyJWT, isAdmin, notApproveOrder);
 orderRouter.route("/orderQrCode").post(verifyJWT, orderQrCode);
+orderRouter.route("/getOrderDetails").get(verifyJWT, getOrderDetails);
 
 export default orderRouter;
