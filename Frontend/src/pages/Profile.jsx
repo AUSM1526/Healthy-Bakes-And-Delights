@@ -10,11 +10,23 @@ import toast from "react-hot-toast";
 import DefaultIcon from "../assets/DefaultIcon.jpg";
 import ShowAddressDetails from "../components/Address/ShowAddressDetails";
 import AddAddressModal from "../components/Address/AddAddressModal";
+import { useNavigate } from "react-router-dom";
+import { CalendarDays } from "lucide-react";
+
+const statusColors = {
+  Pending: "bg-yellow-100 text-yellow-800",
+  Delivered: "bg-green-100 text-green-800",
+  Shipped: "bg-blue-100 text-blue-800",
+  Cancelled: "bg-gray-100 text-gray-600",
+  NotApproved: "bg-red-100 text-red-800",
+  Approved: "bg-green-100 text-green-800",
+};
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //console.log("User: ", user);
   const username = user?.username || null;
@@ -123,6 +135,37 @@ const Profile = () => {
     fetchAddressDetails();
   },[]);
 
+  const [orders, setOrders] = useState([]);
+
+  const fetchOrderDetails = async() => {
+    setLoading(true);
+    try {
+        const res = await apiFunc().get("/user/order-history");
+        const orderDetails = res.data.data.orders;
+        const recentOrders = orderDetails[0].orderHistory.slice(0,2);
+        setOrders(recentOrders);
+        console.log("Orders: ", recentOrders);
+    } catch (error) {
+        console.log("Error fetching order details:", error);
+        toast.error(error.response.data.message || "Failed to fetch order details. Please try again later.");
+    } finally{
+        setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchOrderDetails();
+  },[]);
+
+  const options = {
+    year: 'numeric',
+    month: 'long',   
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,     
+  };
+
   return (
     <>
       <Navbar />
@@ -204,7 +247,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <button className="mt-9 bg-[#5c3a1d] hover:bg-[#3e2b1c] text-white w-full py-2 rounded-lg text-sm font-medium">
+            <button className="mt-9 bg-[#5c3a1d] hover:bg-[#3e2b1c] text-white w-full py-2 rounded-lg text-sm font-medium" onClick={() => navigate("/myOrders")}>
               View My Orders
             </button>
           </div>
@@ -227,9 +270,50 @@ const Profile = () => {
             <div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
                 <h2 className="text-lg sm:text-xl font-semibold">Recent Orders</h2>
-                <button className="text-sm text-[#5c3a1d] font-medium hover:underline">View All</button>
+                <button className="text-sm text-[#5c3a1d] font-medium hover:underline" onClick={() => navigate("/myOrders")}>View All</button>
               </div>
-              <p className="text-gray-400 italic">No recent orders yet.</p>
+                  {orders.length > 0 ? (
+                    <>
+                       {orders.map((historyItem, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="border border-x-chocolate-light rounded-md p-4 mb-4 shadow-sm bg-white"
+                              >
+                                      <div className="flex justify-between items-center">
+                                          <div>
+                                            <h3 className="font-semibold">Order #HBD{historyItem._id.slice(0,6)}</h3>
+                                            <div className="flex items-center gap-1 text-sm text-gray-600">
+                                              <CalendarDays size={14} />
+                                              <span>{new Date(historyItem.createdAt).toLocaleString("en-IN", options)}</span>
+                                            </div>
+                                          </div>
+
+                                          <div className="flex flex-col sm:flex-row sm:justify-end sm:items-center gap-2 text-right">
+                                              {historyItem.isApproved ? (
+                                                    <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">Approved</span>
+                                                  ) : (
+                                                        <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">Not Approved</span>
+                                                      )}
+                                                                  
+                                              <span className={`text-xs px-2 py-1 rounded-full ${statusColors[historyItem.status]}`}>
+                                                {historyItem.status === "NotApproved" ? "Waiting for Approval" : historyItem.status}
+                                            </span>
+
+                                              <div className="text-lg font-semibold mt-1 sm:mt-0">
+                                                ₹{historyItem.totalPrice.toLocaleString("en-IN")}
+                                            </div>
+                                          </div>
+                                      </div>
+                              </div>
+                          );
+                       }
+                      )}
+                    </>
+                  ):
+                  (
+                    <p className="text-gray-400 italic">No recent orders yet.</p>
+                  )}
             </div>
 
           </div>
