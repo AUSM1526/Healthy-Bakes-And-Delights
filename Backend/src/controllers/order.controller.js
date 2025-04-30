@@ -419,7 +419,6 @@ const notApproveOrder = asyncHandler(async (req, res, next) => {
         {
             $set:{
                 isApproved: false,
-                status: "Not Approved"
             }
         },
         {
@@ -449,6 +448,7 @@ const notApproveOrder = asyncHandler(async (req, res, next) => {
     );
 });
 
+// Generate QR Code for Order
 const orderQrCode = asyncHandler(async (req, res, next) => {
     const {total} = req.query;
     const qrCode = await generateUPIQRCode(total);
@@ -459,6 +459,20 @@ const orderQrCode = asyncHandler(async (req, res, next) => {
     
 });
 
+// getOrder details
+const getOrderDetails = asyncHandler(async (req, res, next) => {
+    const {orderId} = req.query;
+    if(!mongoose.Types.ObjectId.isValid(orderId)){
+        throw new ApiError(400, "Invalid orderId");
+    }
+
+    const order = await Order.findById(orderId);
+
+    return res.status(200).json(
+        new ApiResponse(200, {order}, "Order details fetched successfully")
+    )
+});
+
 export {
     placeSingleOrder,
     placeCartOrder,
@@ -467,5 +481,6 @@ export {
     cancelOrder,
     approveOrder,
     notApproveOrder,
-    orderQrCode
+    orderQrCode,
+    getOrderDetails
 };
