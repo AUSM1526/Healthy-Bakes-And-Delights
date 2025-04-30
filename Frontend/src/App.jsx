@@ -11,6 +11,7 @@ import CartPage from "./pages/Cart";
 import SingleOrderPage from "./pages/SingleOrder";
 import CartOrderPage from "./pages/CartOrder";
 import OrderSuccess from "./pages/OrderSuccess";
+import MyOrders from "./pages/MyOrders";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -66,6 +67,7 @@ const App = () => {
           <Route path="/order" element={<SingleOrderPage/>}/>
           <Route path="/cartOrder" element={<CartOrderPage/>}/>
           <Route path="/orderSuccess" element={<OrderSuccess/>}/>
+          <Route path="/myOrders" element={<MyOrders/>}/>
         </Route>
         
       </Routes>
