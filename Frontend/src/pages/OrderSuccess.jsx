@@ -66,7 +66,7 @@ const OrderSuccess = () => {
 
           <div className="bg-white border border-gray-200 rounded-md shadow-sm mt-6 text-left">
             <div className="border-b border-gray-200 p-4">
-              <p className="font-medium">Order #HBD{orderId}</p>
+              <p className="font-medium">Order #HBD{orderId.slice(0,6)}</p>
               <p className="text-sm text-gray-500 mt-1">Placed on {formattedDate}</p>
             </div>
 
