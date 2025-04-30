@@ -383,11 +383,36 @@ const getOrderHistory = asyncHandler(async (req, res) => {
             $unwind: "$orderHistory"
         },
         {
+            $lookup:{
+                from: 'addresses',
+                localField: 'orderHistory.address',
+                foreignField: '_id',
+                as: 'orderAddress'
+            }
+        },
+        {
+            $addFields:{
+                "orderHistory.address": {$arrayElemAt: ["$orderAddress", 0]}
+            }
+        },
+        {
+            $sort:{
+                "orderHistory.createdAt": -1
+            }
+        },
+        {
             $project:{
+                "orderHistory._id": 1,
+                "orderHistory.address": 1,
+                "orderHistory.isApproved": 1,
                 "orderHistory.status": 1,                     
                 "orderHistory.products.product": 1,          
                 "orderHistory.products.price": 1,            
-                "orderHistory.products.quantity": 1,         
+                "orderHistory.products.quantity": 1,
+                "orderHistory.products.productType": 1,
+                "orderHistory.products.subCategory": 1,
+                "orderHistory.products.image": 1,
+                "orderHistory.products.productName": 1,        
                 "orderHistory.totalPrice": 1,       
                 "orderHistory.createdAt": 1 
             }
