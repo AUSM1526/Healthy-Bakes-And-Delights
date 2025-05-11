@@ -33,7 +33,14 @@ const Login = () => {
             if(response?.data?.statusCode === 200){
                 toast.success("Login Successfull");
                 dispatch(login(response.data.data.user));
-                navigate("/");
+                const user = response.data.data.user;
+                console.log(user.accountType);
+                if(user.accountType === "admin"){
+                    navigate("/admin");
+                }
+                else {
+                  navigate("/");
+                }
             }
         } catch (error) {
             toast.error(`${error.response?.data?.message} ` || "Login failed");
