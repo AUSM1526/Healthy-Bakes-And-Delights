@@ -16,6 +16,8 @@ const Navbar_Login = () => {
     const user = useSelector((state) => state.auth.user);
     const avatar = user?.avatar || null;
 
+    const isAdmin = user?.accountType === "admin" ? true : false;
+
     const navigate = useNavigate();
 
     //Close menu when clicking outside
@@ -67,6 +69,17 @@ const Navbar_Login = () => {
                             );
                         })}
                     </nav>
+
+                    {isAdmin && (
+                        <div className="hidden md:flex items-center gap-4">
+                        <Link
+                            className="text-chocolate-dark hover:text-chocolate-gold text-lg font-medium transition-colors duration-300"
+                            to="/admin"
+                        >
+                            Admin Dashboard
+                        </Link>            
+                    </div>
+                    )}
 
                     {/* Cart & User Profile */}
                     <div className="flex items-center gap-6">
@@ -166,6 +179,15 @@ const Navbar_Login = () => {
                             }
                         )
                     }
+                    {isAdmin && (
+                        <Link
+                            className="block text-chocolate-dark text-lg font-medium transition hover:text-chocolate-gold"
+                            to="/admin"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Admin Dashboard
+                        </Link>
+                    )}
                 </div>
             )}
         </header>
