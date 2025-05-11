@@ -24,6 +24,7 @@ const Sidebar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
+  const navigate = useNavigate();
 
   const adminNavLinks = [
     { to: "/admin", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
@@ -52,13 +53,11 @@ const Sidebar = () => {
             </button>
 
             {/* Logo / Title */}
-            <h1
-                className={`font-playfair text-2xl font-bold mb-8 transition-opacity duration-300 ${
+            <button className={`font-playfair text-3xl font-bold mb-8 transition-opacity duration-300 text-left ${
                 isCollapsed ? "opacity-0 h-0 overflow-hidden" : "opacity-100"
-                }`}
-            >
-                Healthy Bakes & Delights
-            </h1>
+                }`} onClick={() => navigate("/")}>
+                  Healthy Bakes & Delights
+            </button>
 
             {/* Nav Items */}
             <nav className="space-y-6">
