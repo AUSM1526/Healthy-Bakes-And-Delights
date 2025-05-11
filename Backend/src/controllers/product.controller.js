@@ -395,6 +395,30 @@ const getProductDetails = asyncHandler(async (req, res, next) => {
     )
 });
 
+// getAllProducts
+const getAllProducts = asyncHandler(async (req, res, next) => {
+    const products = await Product.find().populate(
+        [
+            {
+                path: "productType",
+                select: "-_id name"
+            },
+            {
+                path: "subCategory",
+                select: "-_id basePrice name"
+            }
+        ]
+    );
+
+    if(!products || products.length === 0) {
+        throw new ApiError(404, "No Products found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, { products }, "All Products Displayed successfully")
+    )
+});
+
 
 export {
     createProduct,
@@ -403,5 +427,6 @@ export {
     deleteProductImage,
     addProductImages,
     deleteProduct,
-    getProductDetails
+    getProductDetails,
+    getAllProducts
 };

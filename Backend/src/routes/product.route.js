@@ -2,7 +2,7 @@ import {Router} from "express";
 import {verifyJWT} from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.middleware.js";
 import {upload} from "../middlewares/multer.middleware.js";
-import { createProduct, getProductsWithSubcategory, updateProductDetails,deleteProductImage, addProductImages, deleteProduct, getProductDetails} from "../controllers/product.controller.js";
+import { createProduct, getProductsWithSubcategory, updateProductDetails,deleteProductImage, addProductImages, deleteProduct, getProductDetails, getAllProducts} from "../controllers/product.controller.js";
 
 const productRouter = Router();
 
@@ -13,5 +13,6 @@ productRouter.route("/delete-product-image").delete(verifyJWT,isAdmin,deleteProd
 productRouter.route("/add-product-images").patch(verifyJWT,isAdmin,upload.array("images",5),addProductImages);
 productRouter.route("/delete-product").delete(verifyJWT,isAdmin,deleteProduct);
 productRouter.route("/get-product-details").get(getProductDetails);
+productRouter.route("/get-all-products").get(getAllProducts);
 
 export default productRouter;
