@@ -14,6 +14,7 @@ import CartOrderPage from "./pages/CartOrder";
 import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminProductsPage from "./pages/Admin/AdminProducts";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -73,6 +74,7 @@ const App = () => {
 
             <Route element={<AdminRoute/>}>
               <Route path="/admin" element={<AdminDashboard/>}/>
+              <Route path="/adminProducts" element={<AdminProductsPage/>}/>
             </Route>
             
         </Route>
