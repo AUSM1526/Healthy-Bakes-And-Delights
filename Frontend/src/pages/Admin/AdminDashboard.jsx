@@ -12,7 +12,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="flex-1 p-6 py-12 md:py-6">
         <div className="mb-6">
-          <h2 className="text-3xl font-bold">Dashboard</h2>
+          <h2 className="font-playfair text-3xl font-bold">Dashboard</h2>
           <p className="text-sm text-[#6c4f3d]">Welcome back, Admin</p>
         </div>
 
