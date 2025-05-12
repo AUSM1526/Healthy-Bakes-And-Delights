@@ -109,9 +109,28 @@ const getAllSubCategories = asyncHandler(async (req, res, next) => {
     );
 });
 
+// Get All subCategories by Product Type
+const getAllSubCategoriesByProductType = asyncHandler(async (req, res, next) => {
+    const {productTypeId} = req.query;
+    if (!mongoose.Types.ObjectId.isValid(productTypeId)) {
+        throw new ApiError(400, "Invalid productType ID format");
+    }
+
+    const subCategories = await SubCategory.find({productType: productTypeId});
+
+    if(!subCategories || subCategories.length === 0){
+        throw new ApiError(404, "No Sub Categories found for this Product Type");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {subCategories}, "Sub Categories fetched successfully")
+    );
+});
+
 export {
     createSubCategory,
     updateSubCategory,
     deleteSubCategory,
-    getAllSubCategories
+    getAllSubCategories,
+    getAllSubCategoriesByProductType
 };
