@@ -1,4 +1,3 @@
-import React from "react";
 import { X, Trash2 } from "lucide-react";
 import { apiFunc } from "../../utils/apiClient";
 import Spinner from "../Spinner";
