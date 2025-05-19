@@ -268,10 +268,8 @@ const AdminProductsPage = () => {
 
         {showDeleteModal && (
           <DeleteProductModal isOpen={showDeleteModal}
-            onClose={() => {
-                  setShowDeleteModal(false);
-                  allProducts();
-                  }} 
+            onClose={() => setShowDeleteModal(false)}
+            onSuccess={() => allProducts()}
             productName={selectedProduct.name} 
             subCategory={selectedProduct.subCategory} 
             productId={selectedProduct.id}

@@ -5,7 +5,7 @@ import Spinner from "../Spinner";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const DeleteProductModal = ({ isOpen, onClose, productName, subCategory, productId }) => {
+const DeleteProductModal = ({ isOpen, onClose, productName, subCategory, productId, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   
   const handleDelete = async() => {
@@ -13,11 +13,14 @@ const DeleteProductModal = ({ isOpen, onClose, productName, subCategory, product
     try {
         await apiFunc().delete(`/product/delete-product?productId=${productId}`);
         toast.success("Product deleted successfully");
+        if(onSuccess) {
+            onSuccess();
+        }
+        onClose();
     } catch (error) {
         console.log("Error deleting product:", error);
     } finally {
         setLoading(false);
-        onClose();
     }
   }
   if (!isOpen) return null;
