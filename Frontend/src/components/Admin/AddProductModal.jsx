@@ -97,7 +97,7 @@ const AddProductModal = ({ onClose , onSuccess }) => {
             });
         }
         try {
-            console.log("Form Data: ",formData);
+            //console.log("Form Data: ",formData);
             const res = await apiFunc().post("/product/create-product", formDataToSend);
             toast.success("Product added successfully!");
             if(onSuccess) {
