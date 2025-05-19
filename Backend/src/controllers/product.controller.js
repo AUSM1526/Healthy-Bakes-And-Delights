@@ -174,19 +174,18 @@ const updateProductDetails = asyncHandler(async (req, res, next) => {
 
 
     if (!mongoose.Types.ObjectId.isValid(productId)) {
-        throw new ApiError(400, "Invalid product ID format...");
+        throw new ApiError(400, "Invalid product ID format");
     }
 
     const productExists = await Product.findById(productId);
     if(!productExists){
         throw new ApiError(404, "Product not found");
     }
-
-    //console.log(productTypeName);   
+  
     const productTypeExists = await ProductType.findOne({name: productTypeName});
     //console.log("Product Type: ",productTypeExists);
     if(!productTypeExists){
-        throw new ApiError(400,"Product Type does not existsss");
+        throw new ApiError(400,"Product Type does not exists");
     }
 
     let subCategoryExists = null;
@@ -401,11 +400,11 @@ const getAllProducts = asyncHandler(async (req, res, next) => {
         [
             {
                 path: "productType",
-                select: "-_id name"
+                select: "_id name"
             },
             {
                 path: "subCategory",
-                select: "-_id basePrice name"
+                select: "_id basePrice name"
             }
         ]
     );
