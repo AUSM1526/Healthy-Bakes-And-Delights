@@ -127,10 +127,54 @@ const getAllSubCategoriesByProductType = asyncHandler(async (req, res, next) => 
     );
 });
 
+// Get All products per subCategory
+const getAllProductsPerSubCategory = asyncHandler(async (req, res, next) => {
+    const productsPerSub = await SubCategory.aggregate([
+        {
+            $lookup:{
+                from: "products",
+                localField: "_id",
+                foreignField: "subCategory",
+                as: "products"
+            }
+        },
+        {
+            $lookup:{
+                from: "producttypes",
+                localField: "productType",
+                foreignField: "_id",
+                as: "productType"
+            }
+        },
+        {
+            $unwind: "$productType"
+        },
+        {
+            $project:{
+                _id: 1,
+                name: 1,
+                basePrice: 1,
+                productTypeId: "$productType._id",
+                productTypeName: "$productType.name",
+                count: { $size: "$products" },
+            }
+        }
+    ]);
+
+    if(!productsPerSub || productsPerSub.length === 0){
+        throw new ApiError(404, "No Products found for this Sub Category");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {productsPerSub}, "Products fetched successfully")
+    );
+});
+
 export {
     createSubCategory,
     updateSubCategory,
     deleteSubCategory,
     getAllSubCategories,
-    getAllSubCategoriesByProductType
+    getAllSubCategoriesByProductType,
+    getAllProductsPerSubCategory
 };

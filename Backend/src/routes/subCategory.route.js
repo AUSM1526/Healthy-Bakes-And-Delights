@@ -1,7 +1,7 @@
 import {Router} from "express";
 import {verifyJWT} from "../middlewares/auth.middleware.js";
 import { isAdmin } from "../middlewares/isAdmin.middleware.js";
-import {createSubCategory,updateSubCategory,deleteSubCategory,getAllSubCategories, getAllSubCategoriesByProductType} from "../controllers/subCategory.controller.js";
+import {createSubCategory,updateSubCategory,deleteSubCategory,getAllSubCategories, getAllSubCategoriesByProductType, getAllProductsPerSubCategory} from "../controllers/subCategory.controller.js";
 
 const subCategoryRouter = Router();
 
@@ -10,5 +10,6 @@ subCategoryRouter.route("/:subCategoryId").patch(verifyJWT, isAdmin, updateSubCa
 subCategoryRouter.route("/:subCategoryId").delete(verifyJWT, isAdmin, deleteSubCategory);
 subCategoryRouter.route("/get-all-subCategories").get(verifyJWT, isAdmin, getAllSubCategories);
 subCategoryRouter.route("/get-all-subCategories-by-productType").get(verifyJWT, isAdmin, getAllSubCategoriesByProductType);
+subCategoryRouter.route("/get-all-products-per-subCategory").get(verifyJWT, isAdmin, getAllProductsPerSubCategory);
 
 export default subCategoryRouter;
