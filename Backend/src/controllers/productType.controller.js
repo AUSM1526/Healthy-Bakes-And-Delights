@@ -146,10 +146,45 @@ const updateImage = asyncHandler(async (req, res) => {
 
 });
 
+// get Products per Product Type
+const getProductsPerProductType = asyncHandler(async (req, res, next) => {
+    const productsPerProductType = await ProductType.aggregate([
+        {
+            $lookup: {
+                from: 'products',
+                localField: '_id',
+                foreignField: 'productType',
+                as: 'products'
+            }
+        },
+        {
+            $project:{
+                _id: 0,
+                productType: {
+                    _id: "$_id",
+                    name: "$name",
+                    image: "$image",
+                    hasSubCategories: "$hasSubCategories"
+                },
+                count: {$size: "$products"}
+            }
+        },
+    ]);
+
+    if(!productsPerProductType || productsPerProductType.length === 0) {
+        throw new ApiError(404, "No Products found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, { productsPerProductType }, "All Products per ProductTypes Displayed successfully")
+    )
+});
+
 export { 
     addProductType,
     getAllProductTypes,
     updateProductType,
     deleteProductType,
-    updateImage
+    updateImage,
+    getProductsPerProductType
 };
