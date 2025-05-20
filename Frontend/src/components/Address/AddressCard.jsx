@@ -45,7 +45,7 @@ const AddressCard = ({addrId,houseNumber,name,area,city,state,pincode,isDefault,
   const handleDelete = async() => {
     try {
       const res = await apiFunc().delete(`/address/${addrId}`);
-      dispatch(login(res.data.data.user));
+      //dispatch(login(res.data.data.user));
       if(OnSuccess) OnSuccess();
       toast.success("Address deleted successfully");
     } catch (error) {
