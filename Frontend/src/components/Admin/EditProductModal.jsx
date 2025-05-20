@@ -120,6 +120,7 @@ const EditProductModal = ({ product, onClose, onSuccess }) => {
         console.log("Error while saving product details: ", error);
     } finally{
         setLoading(false);
+        onClose();
     }
   }
 
@@ -137,13 +138,15 @@ const EditProductModal = ({ product, onClose, onSuccess }) => {
 
     try {
         await apiFunc().patch(`/product/add-product-images?productId=${productId}`,formDataToSend);
-        onClose();
         toast.success("Product images updated successfully");
         if(onSuccess){
             onSuccess();
         }
     } catch (error) {
         console.log("Error while saving product images: ", error);
+    } finally{
+        setLoading(false);
+        onClose();
     }
   }
 
@@ -328,7 +331,6 @@ const EditProductModal = ({ product, onClose, onSuccess }) => {
                     <button onClick={onClose} className="text-[#5b3a29] border px-4 py-2 rounded-xl hover:bg-chocolate-light">Cancel</button>
                     <button onClick={(e) => {
                         saveProductDetails(e);
-                        onClose();
                     }} className="bg-[#5b3a29] text-white px-4 py-2 rounded-xl hover:bg-chocolate-buttonColor">Save Changes</button>
                 </div>
                 )}
