@@ -8,6 +8,8 @@ import {useNavigate} from "react-router-dom";
 const Navbar = () => {
     const user = useSelector((state) => state.auth.user);
     const isLoggedIn = Boolean(user);
+    console.log("User:", user);
+    console.log("isLoggedIn", isLoggedIn);
     const location = useLocation();
     const currentPath = location.pathname;
 
