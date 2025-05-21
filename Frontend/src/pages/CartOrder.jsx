@@ -63,6 +63,11 @@ const CartOrderPage = () => {
 
     const handlePlaceOrder = async () => {
         setLoading(true);
+        if(transactionId.length !== 12){
+            toast.error("Please enter a valid UPI transaction ID");
+            setLoading(false);
+            return;
+        }
         try {
             const res = await apiFunc().post(`/order/placeCartOrder?productId=${products[0].productId}&quantity=${products[0].quantity}&addressId=${selectedAddress}&upiTransactionId=${transactionId}`);
             const orderDetails = res.data.data.createdOrder;
