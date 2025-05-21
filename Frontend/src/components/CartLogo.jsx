@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 const Cart = () => {
 
     const cartItems = useSelector((state) => state.auth.user.cart);
-    const totalItems = cartItems.reduce((acc,item) => {
+    const totalItems = cartItems ?  cartItems.reduce((acc,item) => {
         return acc + item.quantity;
-    },0);
+    },0) : 0;
 
     return (
         <div class=" flex justify-center items-center">
