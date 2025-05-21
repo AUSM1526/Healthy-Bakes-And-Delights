@@ -19,6 +19,7 @@ import AdminProductTypesPage from "./pages/Admin/AdminProductTypes";
 import AdminSubCategoriesPage from "./pages/Admin/AdminSubCategories";
 import AdminOrdersPage from "./pages/Admin/AdminOrders";
 import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -68,6 +69,7 @@ const App = () => {
         <Route path="/products" element={<Product/>}/>
         <Route path="/productDetail" element={<ProductDetail/>}/>
         <Route path="/about" element={<AboutUs/>}/>
+        <Route path="/contact" element={<ContactUs/>}/>
         
         <Route element={<PrivateRoute/>}>
           <Route path="/profile" element={<Profile/>}/>
