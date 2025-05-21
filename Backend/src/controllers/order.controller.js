@@ -217,8 +217,8 @@ const placeCartOrder = asyncHandler(async (req, res, next) => {
 
 });
 
-// Get all Orders
-const getAllOrders = asyncHandler(async (req, res, next) => {
+// Get all Orders By Status
+const getAllOrdersByStatus = asyncHandler(async (req, res, next) => {
     const {status} = req.query;
 
     const orders = await Order.aggregate([
@@ -256,7 +256,7 @@ const getAllOrders = asyncHandler(async (req, res, next) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, {orders}, "Orders fetched successfully")
+        new ApiResponse(200, {orders}, "Orders By Status fetched successfully")
     );
 });
 
@@ -473,14 +473,37 @@ const getOrderDetails = asyncHandler(async (req, res, next) => {
     )
 });
 
+// get All Orders
+const getAllOrders = asyncHandler(async (req, res, next) => {
+    const orders = await Order.find().populate([
+        {
+            path: 'user',
+            select: 'firstName lastName email phoneNumber'
+        },
+        {
+            path: 'address',
+            select: 'houseNumber name area city state pincode'
+        }
+    ]).select("-products.image -updatedAt -__v").sort({createdAt: -1});
+
+    if(orders.length === 0){
+        throw new ApiError(404, "No orders found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, {orders}, "Orders fetched successfully")
+    );
+});
+
 export {
     placeSingleOrder,
     placeCartOrder,
-    getAllOrders,
+    getAllOrdersByStatus,
     updateOrderStatus,
     cancelOrder,
     approveOrder,
     notApproveOrder,
     orderQrCode,
-    getOrderDetails
+    getOrderDetails,
+    getAllOrders
 };
