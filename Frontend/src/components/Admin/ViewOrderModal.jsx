@@ -45,7 +45,7 @@ const viewOrderModal = ({order,onClose,onSuccess}) => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-base sm:text-lg font-semibold text-[#44352c]">Order #HBD{order.orderId.slice(0,7)}</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-[#44352c]">UPI Transaction ID: {order.transactionId}</h2>
             <p className="text-xs sm:text-sm text-[#7b6652]">{order.date}</p>
           </div>
           <button onClick={onClose}>
@@ -80,7 +80,6 @@ const viewOrderModal = ({order,onClose,onSuccess}) => {
                 </span>
                 <span className="font-medium">Payment Method: UPI</span>
               </div>
-
               <div>
                 <h4 className="font-medium mb-2">Order Items</h4>
                 <div className="text-sm">
