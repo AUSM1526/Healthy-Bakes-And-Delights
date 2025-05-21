@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AddAddressModal from "../components/Address/AddAddressModal";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/authSlice";
+import Footer from '../components/Home/Third'
 
 const CartOrderPage = () => {
   const location = useLocation();
@@ -281,6 +282,7 @@ const CartOrderPage = () => {
             setAddAddress(false);
             }}/>
         }
+            <Footer />
         </>
     );
   

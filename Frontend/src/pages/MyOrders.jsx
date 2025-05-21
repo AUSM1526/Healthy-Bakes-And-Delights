@@ -5,6 +5,7 @@ import { apiFunc } from "../utils/apiClient";
 import { useState,useEffect } from "react";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner";
+import Footer from '../components/Home/Third'
 
 const statusColors = {
   Pending: "bg-yellow-100 text-yellow-800",
@@ -287,6 +288,7 @@ const MyOrders = () => {
                         </div>
                   </>
                 )}
+            <Footer/>
             </>
         )}
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import Navbar from '../components/Navbar';
 import { apiFunc } from '../utils/apiClient';
 import { useState, useEffect } from 'react';
@@ -7,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
+import Footer from '../components/Home/Third'
 
 const CartPage = () => {
     const [cart, setCart] = useState([]);
@@ -171,6 +171,7 @@ const CartPage = () => {
               </>
               
             )}
+            <Footer/>
 
             {loading && <Spinner/>}
         </>

@@ -2,6 +2,7 @@ import React from 'react';
 import Products from '../components/Product/Products';
 import Navbar from "../components/Navbar";
 import { useEffect } from "react";
+import Footer from '../components/Home/Third'
 
 const Product = () => {
     useEffect(() => {
@@ -30,6 +31,7 @@ const Product = () => {
                     <Products />
                 </div>
             </div>
+            <Footer />
         </>
     );
 }

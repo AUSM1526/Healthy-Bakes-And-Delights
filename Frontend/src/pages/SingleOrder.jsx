@@ -5,6 +5,7 @@ import { apiFunc } from "../utils/apiClient";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import AddAddressModal from "../components/Address/AddAddressModal";
+import Footer from '../components/Home/Third'
 
 const SingleOrderPage = () => {
   const location = useLocation();
@@ -265,7 +266,7 @@ const SingleOrderPage = () => {
                     </div>
                 </div>
             </div>
-
+            <Footer />
             {addAddress && <AddAddressModal onClose={() => setAddAddress(false)}    onSuccess={() => {
             fetchAddressDetails();
             setAddAddress(false);

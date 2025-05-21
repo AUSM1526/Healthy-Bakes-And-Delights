@@ -12,6 +12,7 @@ import ShowAddressDetails from "../components/Address/ShowAddressDetails";
 import AddAddressModal from "../components/Address/AddAddressModal";
 import { useNavigate } from "react-router-dom";
 import { CalendarDays } from "lucide-react";
+import Footer from '../components/Home/Third'
 
 const statusColors = {
   Pending: "bg-yellow-100 text-yellow-800",
@@ -318,6 +319,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <Footer/>
 
       {isEditAvatar && (
           <>

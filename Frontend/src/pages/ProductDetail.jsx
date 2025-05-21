@@ -7,6 +7,7 @@ import { addToCart } from "../store/authSlice";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Footer from '../components/Home/Third'
 
 const ProductDetail = () => {
   const { state } = useLocation();
@@ -175,6 +176,7 @@ const ProductDetail = () => {
           </p>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
