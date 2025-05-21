@@ -128,7 +128,7 @@ const MyOrders = () => {
                                         >
                                             <div className="flex justify-between items-center">
                                                 <div>
-                                                    <h3 className="font-semibold">Order #HBD{historyItem._id.slice(0,6)}</h3>
+                                                    <h3 className="font-semibold">Order #HBD{historyItem._id.slice(0,7)}</h3>
                                                     <div className="flex items-center gap-1 text-sm text-gray-600">
                                                     <CalendarDays size={14} />
                                                     <span>{new Date(historyItem.createdAt).toLocaleString("en-IN", options)}</span>
