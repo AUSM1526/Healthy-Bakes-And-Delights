@@ -115,7 +115,7 @@ const Navbar_Login = () => {
                                             className="block rounded-lg px-4 py-2 text-chocolate-dark hover:bg-chocolate-light hover:text-chocolate-gold"
                                             role="menuitem"
                                         >
-                                            View Profile
+                                            View Profile & Orders
                                         </a>
                                     </div>
                                     <Logout />
