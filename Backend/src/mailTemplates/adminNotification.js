@@ -79,7 +79,7 @@ const adminOrderNotification = (userName, firstName, lastName, userEmail, totalA
 
 <body>
   <div class="container">
-    <div class="header">🍫 New Order Placed</div>
+    <div class="header">New Order Placed</div>
     <div class="body">
       <p>Dear Admin,</p>
       <p>
