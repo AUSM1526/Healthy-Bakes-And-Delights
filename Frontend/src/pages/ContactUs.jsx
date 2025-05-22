@@ -1,7 +1,8 @@
 import React from "react";
 import { MapPin, Phone, Mail } from "lucide-react";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Home/Third"
+import Footer from "../components/Home/Third";
+import { useEffect } from "react";
 
 const ContactUs = () => {
     useEffect(() => {
