@@ -5,7 +5,6 @@ import { useEffect } from "react";
 
 const AboutUs = () => {
     useEffect(() => {
-        simulateLoading();
         window.scrollTo(0, 0);
     }, []);
   return (

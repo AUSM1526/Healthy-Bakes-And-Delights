@@ -6,7 +6,6 @@ import { useEffect } from "react";
 
 const ContactUs = () => {
     useEffect(() => {
-        simulateLoading();
         window.scrollTo(0, 0);
     }, []);
   return (
