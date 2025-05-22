@@ -3,6 +3,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Home/Third";
 
 const AboutUs = () => {
+    useEffect(() => {
+        simulateLoading();
+        window.scrollTo(0, 0);
+    }, []);
   return (
     <>
         <Navbar />
