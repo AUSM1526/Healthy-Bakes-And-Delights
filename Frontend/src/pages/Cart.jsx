@@ -168,10 +168,11 @@ const CartPage = () => {
                             </div>
                         </div>
                     </div>
+                    <Footer/>
               </>
               
             )}
-            <Footer/>
+            
 
             {loading && <Spinner/>}
         </>
