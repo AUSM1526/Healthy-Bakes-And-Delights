@@ -19,7 +19,6 @@ A modern full-stack e-commerce web application for a specialty bakery focusing o
 - **Product Management**: Complete CRUD operations for products and categories
 - **Order Processing**: Review, approve, and manage customer orders
 - **Inventory Control**: Track and update product stock levels
-- **User Management**: View and manage customer accounts
 - **Email Automation**: Automated notifications for order updates
 
 ## 🚀 Tech Stack
@@ -32,16 +31,5 @@ A modern full-stack e-commerce web application for a specialty bakery focusing o
 - **Email Service**: Nodemailer
 - **Payment**: UPI QR Code integration
 - **Deployment**: Vercel, Render
-
-## 📊 Database Schema
-
-### Key Collections
-- **Users**: User accounts with authentication data
-- **Products**: Product catalog with images and pricing
-- **ProductTypes**: Product categories (Chocolate, Granola, etc.)
-- **SubCategories**: Subcategories with base pricing
-- **Orders**: Customer orders with status tracking
-- **Addresses**: User delivery addresses
-- **OTPs**: Temporary OTP storage for verification
 
 ---
