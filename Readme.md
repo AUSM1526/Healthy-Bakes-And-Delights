@@ -1,4 +1,4 @@
-# 🍰 Healthy Bakes & Delights
+# Healthy Bakes & Delights
 
 A modern full-stack e-commerce web application for a specialty bakery focusing on healthy baked goods. Built with React, Node.js, and MongoDB, featuring user authentication, product management, cart functionality, order processing, and comprehensive admin dashboard.
 
