@@ -12,7 +12,7 @@ A modern full-stack e-commerce web application for healthy baked goods and treat
 - **Shopping Cart**: Add, remove, and modify cart items seamlessly
 - **Order Management**: Place orders with UPI payment integration
 - **Multi-address Support**: Manage multiple delivery addresses
-- **Order Tracking**: Real-time order status updates and history
+- **Order Tracking**: Order status updates and order history
 - **Profile Management**: Update personal information and preferences
 
 ### 🛠️ Admin Features
