@@ -46,13 +46,15 @@ A modern full-stack e-commerce web application for a specialty bakery focusing o
 ### Backend
 - **Runtime**: Node.js
 - **Framework**: Express.js 4.21.2
-- **Database**: MongoDB with Mongoose 8.10.0
 - **Authentication**: JSON Web Tokens (JWT) 9.0.2
 - **File Upload**: Multer 1.4.5
 - **Image Storage**: Cloudinary 2.5.1
 - **Email Service**: Nodemailer 6.10.0
 - **Password Hashing**: Bcrypt 5.1.1
 - **Payment**: QRCode 1.5.4 for UPI integration
+
+### Database
+- **Database**: MongoDB with Mongoose 8.10.0
 
 ### Development Tools
 - **Code Formatting**: Prettier
@@ -82,29 +84,18 @@ Healthy_Bakes_And_Delights/
 │   │   ├── utils/            # Utility functions
 │   │   └── mailTemplates/    # Email templates
 │   └── package.json          # Backend dependencies
-├── PROJECT_DOCUMENTATION.md   # Comprehensive project documentation
-├── INTERVIEW_GUIDE.md         # Interview preparation guide
-├── TECHNICAL_WORKFLOWS.md     # System design and workflows
-├── API_DOCUMENTATION.md       # Complete API reference
 └── README.md                  # This file
 ```
 
 ## 🚀 Deployment
 
-### Backend Deployment (Render)
-1. Set up environment variables on your hosting platform
-2. Build the application: `npm run build`
-3. Deploy the `Backend` directory
+### Backend (Render)
+1. Set up environment variables on Render
+2. Deploy the `Backend` directory to Render
 
-### Frontend Deployment (Vercel)
-1. Build the frontend: `npm run build`
-2. Deploy the `dist` folder
-3. Configure API base URL in production
-
-### Database (MongoDB Atlas)
-1. Create a MongoDB Atlas cluster
-2. Configure network access and database users
-3. Update `MONGODB_URI` in environment variables
+### Frontend (Vercel)
+1. Deploy the `Frontend` directory to Vercel
+2. Configure API base URL in production
 
 ## 📊 Database Schema
 
@@ -120,24 +111,15 @@ Healthy_Bakes_And_Delights/
 ## 🎯 Key Features Showcase
 
 ### 1. Conditional Product Hierarchy
-Products can have subcategories based on product type:
-- **Chocolate products**: Require subcategories (Dark, Milk, White)
-- **Other products**: Direct pricing without subcategories
+- Products can have subcategories based on product type
+- Flexible category system for different product types
 
 ### 2. Dynamic Pricing System
-```
-Total Price = Base Price (from subcategory) + Additional Price (product-specific)
-```
+- Base price from subcategory + additional price from product
+- Flexible pricing model for product variations
 
-### 3. Admin Order Workflow
-```
-Order Placed → Pending → Admin Review → Approved/Rejected → Shipped → Delivered
-```
-
-### 4. Email Automation
-- Registration OTP verification
-- Order confirmation emails
-- Admin order notifications
-- Order status update emails
+### 3. Email Automation
+- Automated email notifications for all order states
+- OTP verification system for user registration
 
 ---
