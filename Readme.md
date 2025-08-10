@@ -1,6 +1,6 @@
 # Healthy Bakes & Delights
 
-A modern full-stack e-commerce web application for healthy baked goods and treats. The platform allows customers to browse and purchase products online, manage their orders, and provides comprehensive administrative tools for business management.
+A modern full-stack e-commerce web application for healthy baked goods and treats. The platform allows customers to browse and purchase products, manage their orders, and provides comprehensive administrative tools for business management.
 
 ![Project Banner](https://img.shields.io/badge/Full--Stack-E--Commerce-brightgreen?style=for-the-badge) ![React](https://img.shields.io/badge/React-19.0.0-blue?style=for-the-badge&logo=react) ![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js) ![MongoDB](https://img.shields.io/badge/MongoDB-Database-green?style=for-the-badge&logo=mongodb)
 

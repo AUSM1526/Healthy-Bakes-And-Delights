@@ -12,7 +12,7 @@ import { mailSender } from "../utils/mailSender.js";
 import {otpTemplate} from "../mailTemplates/emailVerification.js";
 import bcrypt from "bcrypt";
 
-//Function to genearate access and refresh token
+//Function to generate access and refresh token
 const generateAccessAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId);
